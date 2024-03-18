@@ -1,4 +1,4 @@
-> **Für die deutsche Version bitte [hier](support_de.md) klicken.**
+> **Für die deutsche Version bitte [hier](support_de.html) klicken.**
 
 Depending on the subject of support requested, please, choose one of the following channels.
 

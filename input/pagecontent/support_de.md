@@ -1,4 +1,4 @@
-> **For the english version please click [here](support_en.md).**
+> **For the english version please click [here](support_en.html).**
 
 Bitte wählen Sie je nach dem Thema der angeforderten Unterstützung einen der folgenden Kanäle.
 

@@ -1,4 +1,4 @@
-> **For the english version please click [here](index_en.md).**
+> **For the english version please click [here](index_en.html).**
 
 Ziel dieses Implementierungsleitfadens ist die Beschreibung von Struktur, Format und Standards von medizinischen Dokumenten der Elektronischen Gesundheitsakte „ELGA“ gemäß Gesundheitstelema- tikgesetz 2012 (GTelG 2012), aber auch für medizinische Dokumente im österreichischen Gesund- heitswesen.
 
@@ -40,7 +40,7 @@ Fragen, Kommentare oder Anregungen für die Weiterentwicklung können an cda@elg
 #### v3
 TODO Prozess, Autoren und Mitwirkende
 
-Für den aktuellen Herausgeber siehe [Support & Imprint](support_de.md).
+Für den aktuellen Herausgeber siehe [Support & Imprint](support_de.html#impressum).
 
 #### v2
 Der Implementierungsleitfaden in der Hauptversion 2 entstand im Projekt e-Medikation auf Basis diverser Konsultationen unter Einbeziehung von Vertretern aller Stakeholder. Da die medizinischen Inhalte damals bereits gesetzlich bzw. durch Verordnung des Bundesministers festgelegt sind, wurde keine Harmonisierungsgruppe eingesetzt. Darüber hinaus wurde der damalige Implementierungsleitfaden für die Abstimmung und Diskussion im Zuge der Entwicklung der Usability-Styleguides herangezogen und entsprechend weiterentwickelt. Das Dokument durchlief eine öffentliche Kommentierungsphase und ein nationales Standardisierungsverfahren ("Ballot") durch die HL7 Anwendergruppe Österreich (HL7 Austria). Folgende Personen waren damals an der Erstellung des Leitfadens beteiligt:

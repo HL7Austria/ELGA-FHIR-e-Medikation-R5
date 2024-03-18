@@ -1,4 +1,4 @@
-> **For the english version please click [here](intro_en.md).**
+> **For the english version please click [here](intro_en.html).**
 
 Die Elektronische Gesundheitsakte (ELGA) umfasst die relevanten multimedialen und gesundheitsbezogenen Daten und Informationen zu einer eindeutig identifizierten Person. Die Daten sind in einem oder mehreren computergestützten Informationssystemen gespeichert. Sie stehen allen berechtigten Personen entsprechend ihren Rollen und den datenschutzrechtlichen Bedingungen in einer bedarfsgerecht aufbereiteten elektronischen Form online zur Verfügung.
 Die wesentliche Funktion von ELGA ist die Bereitstellung von patientenbezogenen medizinischen Dokumenten, die in vielen unterschiedlichen Informationssystemen der verschiedenen Gesundheitsdiensteanbieter erstellt werden. Zu den relevanten medizinischen Daten gehören auch die Medikationsdaten, die über die ELGA-Anwendung
@@ -36,14 +36,8 @@ Für das Verständnis der in diesem Leitfaden beschriebenen Use-Cases ist ein Gr
         <td>Nutzen: Reduktion und Vereinfachung papiergebundener Prozesse durch elektronische Erfassung, Einlösung und Abrechnung von Rezepten.</td>
     </tr>
     <tr>
-        <td></td>
-    </tr>
-    <tr>
         <td>Fokus: medizinische Daten (Arzneimittel, Dosierung, Einnahme…)</td>
         <td>Fokus: administrative Daten (Name, Versicherungsnummer…); bei Kassenrezepten: sozialversicherungs-relevante Aspekte (Versicherungsstatus, Rezeptgebührenbefreiung ...). Digitalisierung der Privatrezepte</td>
-    </tr>
-    <tr>
-        <td></td>
     </tr>
     <tr>
         <td>Datenerfassung ist Patientenrecht. Abmeldung von ELGA gesamt oder nur für e-Medikation möglich.</td>
@@ -51,9 +45,6 @@ Für das Verständnis der in diesem Leitfaden beschriebenen Use-Cases ist ein Gr
     </tr>
     <tr>
         <td>Bei Kassenrezepten: Datenerfassung ist Voraussetzung für die Kostenübernahme durch die Sozialversicherung (ersetzt das bisherige Papier-Kassenrezept). Keine Abmeldung möglich.</td>
-    </tr>
-    <tr>
-        <td></td>
     </tr>
     <tr>
         <td>Eine Ärztin bzw. ein Arzt hat nur mit aufrechter Kontaktbestätigung (= e-card wurde innerhalb der letzten 90 Tage in der Ordination gesteckt oder per NFC ausgelesen) Zugriff auf ELGA und e-Medikation (lesend und schreibend), weil Daten anderer GDA eingesehen bzw. Daten zur Einsicht für andere GDA gespeichert werden. Eine Apotheke hat nach Stecken der e-card 28 Tage lang Zugriff auf die e-Medikation.</td>
@@ -64,13 +55,7 @@ Für das Verständnis der in diesem Leitfaden beschriebenen Use-Cases ist ein Gr
     </tr>
     <tr>
         <td>Die Medikationsdaten (Verordnungen und Abgaben) der letzten 18 Monate sind gespeichert und für ELGA-Teilnehmer über das ELGA-Portal bzw. für den GDA bei aufrechter Kontaktbestätigung abrufbar. </td>
-        <td>Versicherte können  über die Portale und Apps der Sozialversicherung alle offenen Kassenrezepte einsehen, die für sie selbst sowie für Mitversicherte unter 14 Jahren ausgestellt wurden. </td>
-    </tr>
-    <tr>
-        <td>Eine Ärztin bzw. ein Arzt kann jene e-Rezepte einsehen, die sie oder er selbst ausgestellt hat, nicht aber solche e-Rezepte, die andere Ärztinnen bzw. Ärzte ausgestellt haben. </td>
-    </tr>
-    <tr>
-        <td>Apotheken erhalten durch Scan des e-Rezept Codes oder Eingabe der e-Rezept ID Zugriff auf EIN bestimmtes e-Rezept. Durch Stecken der e-card oder Nutzung der NFC-Funktion können Apotheken ALLE offenen e-Rezepte einer Person aufrufen.</td>
+        <td>Versicherte können  über die Portale und Apps der Sozialversicherung alle offenen Kassenrezepte einsehen, die für sie selbst sowie für Mitversicherte unter 14 Jahren ausgestellt wurden.<br/>Eine Ärztin bzw. ein Arzt kann jene e-Rezepte einsehen, die sie oder er selbst ausgestellt hat, nicht aber solche e-Rezepte, die andere Ärztinnen bzw. Ärzte ausgestellt haben.<br/>Apotheken erhalten durch Scan des e-Rezept Codes oder Eingabe der e-Rezept ID Zugriff auf EIN bestimmtes e-Rezept. Durch Stecken der e-card oder Nutzung der NFC-Funktion können Apotheken ALLE offenen e-Rezepte einer Person aufrufen.</td>
     </tr>
 </table>
 
@@ -86,8 +71,7 @@ speziell für die Dokumentenklassen
 * Pharmazeutische Empfehlung (Korrekturmeldung)
 * Medikationsliste (automatische Zusammenfassung)
 
-gültig sind. Die Beschreibung enthält Festlegungen, Einschränkungen und Bedingungen auf
-280	Grundlage von HL7 CDA-Elementen.
+gültig sind. Die Beschreibung enthält Festlegungen, Einschränkungen und Bedingungen auf	Grundlage von HL7 CDA-Elementen.
 
 ### Hierarchie der Implementierungsleitfäden
 
