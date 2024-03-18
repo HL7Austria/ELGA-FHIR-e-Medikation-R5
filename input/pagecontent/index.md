@@ -1,28 +1,38 @@
-Linked Care is a comprehensive digital system designed to streamline information flow and accessibility in mobile care, assistance, and therapy. It addresses the growing demand for healthcare services due to demographic changes while facing fewer available health professionals. The system simplifies information exchange and connects all involved parties, including patients, caregivers, doctors, therapists, and pharmacies, in an efficient and secure online platform with optimal IT support. Linked Care aims to enhance collaboration, reduce workload, and improve care quality by standardizing documentation and promoting interoperability across diverse care settings. The system offers numerous advantages, including increased autonomy for clients, streamlined information access for caregivers, improved engagement for patients and their families, and enhanced integration of digital services for healthcare providers.
+Ziel dieses Implementierungsleitfadens ist die Beschreibung von Struktur, Format und Standards von medizinischen Dokumenten der Elektronischen Gesundheitsakte „ELGA“ gemäß Gesundheitstelema- tikgesetz 2012 (GTelG 2012), aber auch für medizinische Dokumente im österreichischen Gesund- heitswesen.
 
-### Aims and Open Issues
-#### Standard for Medication Ordering
-This Implementation Guide (IG) defines a clear and consistent way to order medications through the Linked Care platform. The presented  FHIR artifacts cover the essential steps for each user (referred to as an "actor") to ensure a reliable medication ordering process.
+Die Anwendung dieses Implementierungsleitfadens hat im Einklang mit der Rechtsordnung der Republik Österreich und insbesondere mit den relevanten Materiengesetzen (z.B. Ärztegesetz 1998, Apothekenbetriebsordnung 2005, Krankenanstalten- und Kuranstaltengesetz, Gesundheits- und Kran- kenpflegegesetz, Rezeptpflichtgesetz, Datenschutzgesetz 2000, Gesundheitstelematikgesetz 2012) zu erfolgen. Technische Möglichkeiten können gesetzliche Bestimmungen selbstverständlich nicht verändern, vielmehr sind die technischen Möglichkeiten im Einklang mit den Gesetzen zu nutzen.
 
-#### Target Audience
-We aimed to make this IG a practical tool for software developers implementing the platform, actors interacting with it, and anyone interested in Linked Care. Hence, to better explain the defined standard, the IG includes practical user stories that illustrate real-world workflows and detailed system information, making it easier for everyone to understand and seamlessly integrate the platform.
+Sprachliche Gleichbehandlung: Soweit im Text Bezeichnungen nur im generischen Maskulinum angeführt sind, beziehen sie sich auf Männer und Frauen in gleicher Weise. Unter dem Begriff
+„Patient“ werden sowohl Bürger, Kunden und Klienten zusammengefasst, welche an einem Behandlungs- oder Pflegeprozess teilnehmen als auch gesunde Bürger, die derzeit nicht an einem solchen teilnehmen. Es wird ebenso darauf hingewiesen, dass umgekehrt der Begriff Bürger auch Patienten, Kunden und Klienten mit einbezieht.
 
-#### Features not included in this version
-Private prescriptions, authorization by chief of medicine, notifications to order placer in case of absence of the filler
+# Verbindlichkeit
+Mit der ELGA-Verordnung 2015 (in der Fassung der ELGA-VO-Nov-2015) macht die Bundesministerin für Gesundheit die Festlegungen für Inhalt, Struktur, Format und Codierung verbindlich, die in den Implementierungsleitfäden Entlassungsbrief Ärztlich, Entlassungsbrief Pflege, Pflegesituationsbericht, Laborbefunde, Befund bildgebender Diagnostik, e-Medikation sowie XDS Metadaten (jeweils in der Version 2.06) getroffen wurden. Die anzuwendenden ELGA-Interoperabilitätsstufen ergeben sich aus
+§ 21 Abs. 6 ELGA-VO. Die Leitfäden in ihrer jeweils aktuell gültigen Fassung sowie die aktualisierten Terminologien sind von der Gesundheitsministerin auf www.gesundheit.gv.at zu veröffentlichen. Der Zeitplan zur Bereitstellung der Dokumente für ELGA wird durch das das Gesundheitstelematikge- setz 2012 (GTelG 2012) und darauf basierenden Durchführungsverordnungen durch die Bundes- ministerin für Gesundheit vorgegeben.
+Neue Hauptversionen der Implementierungsleitfäden KÖNNEN ab dem Tag ihrer Veröffentlichung durch den Bundesministerin für Gesundheit (www.gesundheit.gv.at) verwendet werden, spätestens 18 Monate nach ihrer Veröffentlichung MÜSSEN sie verwendet werden. Andere Aktualisierungen (Nebenversionen) dürfen auch ohne Änderung dieser Verordnung unter www.gesundheit.gv.at veröffentlicht und verwendet werden.
+Die Einhaltung der gesetzlichen Bestimmungen liegt im Verantwortungsbereich der Ersteller der CDA- Dokumente.
 
-### Workflow and Resource Interaction
-This IG outlines a workflow involving three key actors: Actor Care, Actor Doctor, and Actor Pharmacy. Actor Care initiates the process by ordering medication, resulting in a LINCARequestOrchestration (order header) containing one or more inline LINCAProposalMedicationRequest — one for each medication (order positions). Hence, there might be multiple for one client.
-In the LINCARequestOrchestration, the "subject" attribute refers to the sending organization. In the order positions, which are of type LINCAProposalMedicationRequest, the "subject" attribute refers to the patient, and the "performer" attribute refers to the designated practitioner. 
-After submitting the LINCARequestOrchestration, the Linked Care FHIR server creates instances for each contained LINCAProposalMedicationRequest. Those are linked to the original order header using the "supportingInformation" attribute. Note: The patient resource is limited to supporting only HL7ATCore Patients.
+# Zielgruppe
+Anwender dieses Dokuments sind Softwareentwickler und Berater, die allgemein mit Implementierungen und Integrationen im Umfeld der ELGA, insbesondere der ELGA- Gesundheitsdaten, betraut sind. Eine weitere Zielgruppe sind alle an der Erstellung von CDA- Dokumenten beteiligten Personen, einschließlich der Endbenutzer der medizinischen Softwaresysteme und der Angehörigen von Gesundheitsberufen.
 
-Next, the Actor Doctor, the designated practitioner, fetches all relevant LINCAProposalMedicationRequest. They can only access and modify LINCAProposalMedicationRequest designated to them. 
-Amongst others, the Actor Doctor can adjust dosage/medication or prescribe an immediate stop to medication intake. 
-Once the Actor Doctor authorizes an order item, they create a LINCAPrescriptionMedicationRequest. The original LINCAProposalMedicationRequest is now a reference in the "basedOn" attribute, and a back-reference to the LINCARequestOrchestration once again in the "supportingInformation" attribute. The LINCAPrescriptionMedicationRequest includes optional attributes like "groupIdentifier" (eRezeptId) and "identifier" (eMedId).
+# Hinweis auf verwendete Grundlagen
+Der vorliegende Leitfaden wurde unter Verwendung der nachstehend beschriebenen Dokumente erstellt. Das Urheberrecht an allen genannten Dokumenten wird im vollen Umfang respektiert.
 
-If the Actor Care has specified a pharmacy (Actor Pharmacy) in the "dispenseRequest" attribute, the designated Actor Pharmacy can fetch the LINCAPrescriptionMedicationRequest and prepare the dispense.
-The Actor Pharmacy must create a LINCAMedicationDispense to document the dispensing process and complete the chain. The "authorizingPrescription" attribute in LINCAMedicationDispense refers to the LINCAPrescriptionMedicationRequest, with the "performer.actor" attribute representing the dispensing Actor Pharmacy. 
-Conversely, Actor Care receives a datamatrix code for pickup, if no specific pharmacy is designated. The information necessary for the LINCAMedicationDispense is retrieved from the datamatrix code using the prescription id contained therein.
+Dieser Standard beruht auf der Spezifikation „HL7 Clinical Document Architecture, Release 2.0“, für die das Copyright © von Health Level Seven International gilt. HL7 Standards können über die HL7 Anwendergruppe Österreich (HL7 Austria), die offizielle Vertretung von Health Level Seven International in Österreich bezogen werden (www.hl7.at). Alle auf nationale Verhältnisse angepassten und veröffentlichten HL7-Spezifkationen können ohne Lizenz- und Nutzungsgebühren in jeder Art von Anwendungssoftware verwendet werden.
 
-We depict this in the following graph:
+Dieser Leitfaden beruht auf Inhalten des LOINC® (Logical Observation Identifiers Names and Codes, siehe http://loinc.org). Die LOINC-Codes, Tabellen, Panels und Formulare unterliegen dem Copyright
+© 1995-2014, Regenstrief Institute, Inc. und dem LOINC Committee, sie sind unentgeltlich erhältlich. Lizenzinformationen sind unter http://loinc.org/terms-of-use abrufbar. Weiters werden Inhalte des UCUM® verwendet, UCUM-Codes, Tabellen und UCUM Spezifikationen beruhen auf dem Copyright
+© 1998-2013 des Regenstrief Institute, Inc. und der Unified Codes for Units of Measures (UCUM) Organization. Lizenzinformationen sind unter http://unitsofmeasure.org/trac/wiki/TermsOfUse abrufbar.
 
-<a href="LINCA_resources_details.svg" target="_blank" style="border:none"><img src="LINCA_resources_details.svg" alt="LINCA Resources, detailed" width ="90%" style="display:block;margin-left:auto;margin-right:auto" /></a>
+# Hinweise zur Nutzung des Leitfadens
+Der vorliegende Leitfaden wurde unter der Leitung der ELGA GmbH und unter Mitwirkung der genannten Personen (Mitglieder der Arbeitsgruppen zur Harmonisierung der Implementierungsleitfäden) erstellt. Die Arbeiten für den vorliegenden Leitfaden wurden von den Autoren gemäß dem Stand der Technik und mit größtmöglicher Sorgfalt erbracht. Die HL7 Austria und die ELGA GmbH genehmigen ausdrücklich die Anwendung des Leitfadens ohne Lizenz- und Nutzungsgebühren zum Zweck der Erstellung medizinischer Dokumente und weisen darauf hin, dass dies mit dem Einverständnis aller Mitwirkenden erfolgt.
+
+# Revisionsliste
+Diese Version ist eine Korrekturversion zu Version 2.05 vom 17.03.2015 und ersetzt diese. Die durchgeführten Änderungen ersehen Sie der Revisionsliste in Kapitel 6.2.
+
+# Weitere unterstützende Materialien
+Gemeinsam mit diesem Leitfaden werden auf der Website der ELGA GmbH (www.elga.gv.at) weitere Dateien und Dokumente zur Unterstützung bereitgestellt: Beispieldokumente, zu verwendende Codes, Vorgaben zur Registrierung von CDA-Dokumenten, das Referenz-Stylesheet zur Darstellung von CDA-Dokumenten, Algorithmen zur Prüfung der Konformität von CDA-Dokumenten etc.
+
+Fragen, Kommentare oder Anregungen für die Weiterentwicklung können an cda@elga.gv.at gesendet werden. 
+
+# Impressum
+Siehe [Support & Imprint](support_de.md).
