@@ -45,11 +45,17 @@ publisher:
 #
 pages:
  index.md:
-   title: ELGA e-Medikation Implementierungsleitfaden in FHIR R5
+   title: Home - Informationen über diesen Leitfaden (de)
+ index_en.md:
+   title: Home - Information about this implementation guide (en) 
  support_de.md:
    title: Support & Impressum (de)
  support_en.md:
    title: Support & Imprint (en)
+ intro_de.md:
+   title: Einleitung & Abgrenzung (de)
+ intro_en.md:
+   title: Intro & Differentiation (en)
 #
 #
 # The parameters property represents IG.definition.parameter. Rather
