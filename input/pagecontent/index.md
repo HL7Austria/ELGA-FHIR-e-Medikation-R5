@@ -34,5 +34,32 @@ Gemeinsam mit diesem Leitfaden werden auf der Website der ELGA GmbH (www.elga.gv
 
 Fragen, Kommentare oder Anregungen für die Weiterentwicklung können an cda@elga.gv.at gesendet werden. 
 
-# Impressum
-Siehe [Support & Imprint](support_de.md).
+# Erarbeitung des Implementierungsleitfadens
+## v3
+-[ ] TODO Prozess, Autoren und Mitwirkende
+
+Für den aktuellen Herausgeber siehe [Support & Imprint](support_de.md).
+
+## v2
+Der Implementierungsleitfaden in der Hauptversion 2 entstand im Projekt e-Medikation auf Basis diverser Konsultationen unter Einbeziehung von Vertretern aller Stakeholder. Da die medizinischen Inhalte damals bereits gesetzlich bzw. durch Verordnung des Bundesministers festgelegt sind, wurde keine Harmonisierungsgruppe eingesetzt. Darüber hinaus wurde der damalige Implementierungsleitfaden für die Abstimmung und Diskussion im Zuge der Entwicklung der Usability-Styleguides herangezogen und entsprechend weiterentwickelt. Das Dokument durchlief eine öffentliche Kommentierungsphase und ein nationales Standardisierungsverfahren ("Ballot") durch die HL7 Anwendergruppe Österreich (HL7 Austria). Folgende Personen waren damals an der Erstellung des Leitfadens beteiligt:
+
+### Herausgeber, Projektleiter, CDA-Koordinator
+Kürzel|Organisation|Person (ohne Titel)
+---|---|---
+SSA | ELGA GmbH | Stefan Sabutsch 
+
+### Autor Fachkoordinator
+Kürzel|Organisation|Person (ohne Titel)
+---|---|---
+JBR | CodeWerk	Software	Services	and Development GmbH | Jürgen Brandstätter
+
+### Mitwirkende
+| Organisation | Person (ohne Titel)|
+|--------------|--------------------|
+| SVC          | Michael Bauer      |
+| SVC          | Michael Deimel     |
+| SVC          | Tanja Krammer      |
+| SVC          | Martin Asenbaum    |
+| ELGA GmbH    | Alexander Kollmann |
+| ELGA GmbH    | Oliver Kuttin      |
+| ELGA GmbH    | Carina Seerainer   |

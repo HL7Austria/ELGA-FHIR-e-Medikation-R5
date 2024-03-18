@@ -46,10 +46,10 @@ publisher:
 pages:
  index.md:
    title: ELGA e-Medikation Implementierungsleitfaden in FHIR R5
-# user_stories_noscroll.md:
-#   title: Linked Care Medication Ordering Process User Stories 
-# technical_information.md:
-#   title: Linked Care Technical Information for Implementers
+ support_de.md:
+   title: Support & Impressum (de)
+ support_en.md:
+   title: Support & Imprint (en)
 #
 #
 # The parameters property represents IG.definition.parameter. Rather
