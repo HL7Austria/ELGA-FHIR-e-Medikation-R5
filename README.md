@@ -1,19 +1,4 @@
-# LinkedCare
+# ELGA e-Medikation
 
-The Implementation Guide for the Linked Care project  
-  
-Authors: The Linked Care Consortium, as published on  
-https://www.linkedcare.at, comprising:
-- Haus der Barmherzigkeit
-- Die Johanniter
-- FH Campus Wien
-- FH Technikum Wien
-- HCS - Health Communication Service
-- LOIDL Consulting & IT Services GmbH
-- myneva Austria
-- Österreichischer Apotheker-Verlag
-- Steszgal IT
-- Universität Wien
-- Volkshilfe Gesundheits- und soziale Dienst GmbH
-- Volkshilfe Wien - Pflege und Betreuung
-- Wiener Rotes Kreuz
+Sie befinden sich hier auf einer Entwurfsversion des zukünftig gültigen e-Medikations Leitfadens v3. 
+Die aktuell gültigen Leitfaden bitten wir Sie von https://wiki.hl7.at/index.php?title=Implementierungsleitf%C3%A4den zu entnehmen.
