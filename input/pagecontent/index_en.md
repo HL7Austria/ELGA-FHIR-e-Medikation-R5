@@ -1,1 +1,1 @@
-> **Für die deutsche Version bitte [hier](index_de.html) klicken.**
+> **Für die deutsche Version bitte [hier](index.html) klicken.**
