@@ -52,7 +52,7 @@ pages:
    title: Einleitung & Abgrenzung (de)
  intro_en.md:
    title: Intro & Differentiation (en)
- usecase_de.md:
+ usecase_de_noscroll.md:
    title: Anwendungsfälle (de)
  usecase_en.md:
    title: Use Cases (en)
