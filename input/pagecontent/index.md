@@ -34,7 +34,7 @@ Diese Version ist eine Korrekturversion zu Version 2.05 vom 17.03.2015 und erset
 ### Weitere unterstützende Materialien
 Gemeinsam mit diesem Leitfaden werden auf der Website der ELGA GmbH (www.elga.gv.at) weitere Dateien und Dokumente zur Unterstützung bereitgestellt: Beispieldokumente, zu verwendende Codes, Vorgaben zur Registrierung von CDA-Dokumenten, das Referenz-Stylesheet zur Darstellung von CDA-Dokumenten, Algorithmen zur Prüfung der Konformität von CDA-Dokumenten etc.
 
-Fragen, Kommentare oder Anregungen für die Weiterentwicklung können an cda@elga.gv.at gesendet werden. 
+> Fragen, Kommentare oder Anregungen für die Weiterentwicklung können an cda@elga.gv.at gesendet werden. 
 
 ### Erarbeitung des Implementierungsleitfadens
 #### v3

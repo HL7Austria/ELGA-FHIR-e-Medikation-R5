@@ -78,4 +78,10 @@ gültig sind. Die Beschreibung enthält Festlegungen, Einschränkungen und Bedin
 Der vorliegende Implementierungsleitfaden basiert auf der grundlegenden Implementierungsvorschrift für alle CDA Dokumente im österreichischen Gesundheitswesen.
 Die CDA Dokumente der e-Medikation haben grundsätzlich den beiden aufeinander aufbauenden Implementierungsleitfäden zu folgen.
 
-...
+![Zusammenspiel der Implementierungsleitfäden](/input/images/Zusammenspiel_der_Implementierungsleitfäden.jpg)
+
+Die administrativen Daten im Dokumentheader und grundsätzliche Vorgaben für den medizinischen Inhalt werden vom „Allgemeinen Implementierungsleitfaden“ definiert. Der jeweilige „Spezielle Implementierungsleitfaden“ enthält die Vorgaben für die medizinischen Inhalte und ergänzt gegebenenfalls die Header-Vorgaben.
+
+Für die Verwendung dieses Implementierungsleitfadens sind zusätzlich die Vorgaben aus
+
+>„HL7 Implementation Guide for CDA® R2: Allgemeiner Implementierungsleitfaden für ELGA CDA Dokumente“ OID Root [1.2.40.0.34.7.1] in der Hauptversion 2 vorausgesetzt.
