@@ -56,6 +56,10 @@ pages:
    title: Einleitung & Abgrenzung (de)
  intro_en.md:
    title: Intro & Differentiation (en)
+ usecase_de.md:
+   title: Anwendungsfälle (de)
+ usecase_en.md:
+   title: Use Cases (en)
 #
 #
 # The parameters property represents IG.definition.parameter. Rather
