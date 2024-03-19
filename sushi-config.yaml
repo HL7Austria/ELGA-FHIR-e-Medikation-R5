@@ -56,8 +56,6 @@ pages:
    title: Anwendungsfälle (de)
  usecase_en.md:
    title: Use Cases (en)
- usecases/general_de.md:
-   title: Use Cases Allgemein (de)
  support_de.md:
    title: Support & Impressum (de)
  support_en.md:
