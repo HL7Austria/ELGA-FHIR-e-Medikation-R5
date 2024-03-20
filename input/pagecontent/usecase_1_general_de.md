@@ -1,4 +1,6 @@
-<h3 id="allgemein">Allgemein</h3>
+h2 {
+   counter-set: count2 1;
+}
 <h4 id="akteure">Akteure</h4>
 <p>Folgende Akteure werden in der ELGA-Anwendung e-Medikation (eMEDAT) definiert:</p>
 <ul>

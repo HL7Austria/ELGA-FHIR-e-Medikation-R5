@@ -1,4 +1,6 @@
-<h3 id="rezept-mit-verordnung-en-abrufen">Rezept mit Verordnung(en) abrufen</h3>
+h2 {
+   counter-set: count2 3;
+}
 <p>Im Zuge der Abgabe eines Arzneimittels in einer Apotheke (nach Identifikation mittels e-card) kann der Akteur die Rezepte samt Verordnungen zu einem ELGA Teilnehmer abrufen. Alternativ zur Identifikation mit e-card kann mittels eMED-ID ein Rezept abgerufen werden</p>
 <h4 id="vorbedingung">Vorbedingung</h4>
 <ul>
