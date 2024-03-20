@@ -41,21 +41,15 @@ Für das Verständnis der in diesem Leitfaden beschriebenen Use-Cases ist ein Gr
     </tr>
     <tr>
         <td>Datenerfassung ist Patientenrecht. Abmeldung von ELGA gesamt oder nur für e-Medikation möglich.</td>
-        <td>Aufrechter Versicherungsschutz ist Voraussetzung für die Nutzung von e-Rezept.</td>
-    </tr>
-    <tr>
-        <td>Bei Kassenrezepten: Datenerfassung ist Voraussetzung für die Kostenübernahme durch die Sozialversicherung (ersetzt das bisherige Papier-Kassenrezept). Keine Abmeldung möglich.</td>
+        <td>Aufrechter Versicherungsschutz ist Voraussetzung für die Nutzung von e-Rezept. Bei Kassenrezepten: Datenerfassung ist Voraussetzung für die Kostenübernahme durch die Sozialversicherung (ersetzt das bisherige Papier-Kassenrezept). Keine Abmeldung möglich.</td>
     </tr>
     <tr>
         <td>Eine Ärztin bzw. ein Arzt hat nur mit aufrechter Kontaktbestätigung (= e-card wurde innerhalb der letzten 90 Tage in der Ordination gesteckt oder per NFC ausgelesen) Zugriff auf ELGA und e-Medikation (lesend und schreibend), weil Daten anderer GDA eingesehen bzw. Daten zur Einsicht für andere GDA gespeichert werden. Eine Apotheke hat nach Stecken der e-card 28 Tage lang Zugriff auf die e-Medikation.</td>
         <td>Eine Ärztin bzw. ein Arzt kann immer ein e-Rezept erstellen. Es reicht die Sozialversicherungsnummer, weil kein Zugriff auf Daten anderer GDA notwendig ist: Patientin bzw. Patient muss nicht anwesend sein, die e-card muss nicht gesteckt oder per NFC ausgelesen werden.</td>
     </tr>
     <tr>
-        <td></td>
-    </tr>
-    <tr>
         <td>Die Medikationsdaten (Verordnungen und Abgaben) der letzten 18 Monate sind gespeichert und für ELGA-Teilnehmer über das ELGA-Portal bzw. für den GDA bei aufrechter Kontaktbestätigung abrufbar. </td>
-        <td>Versicherte können  über die Portale und Apps der Sozialversicherung alle offenen Kassenrezepte einsehen, die für sie selbst sowie für Mitversicherte unter 14 Jahren ausgestellt wurden.<br/>Eine Ärztin bzw. ein Arzt kann jene e-Rezepte einsehen, die sie oder er selbst ausgestellt hat, nicht aber solche e-Rezepte, die andere Ärztinnen bzw. Ärzte ausgestellt haben.<br/>Apotheken erhalten durch Scan des e-Rezept Codes oder Eingabe der e-Rezept ID Zugriff auf EIN bestimmtes e-Rezept. Durch Stecken der e-card oder Nutzung der NFC-Funktion können Apotheken ALLE offenen e-Rezepte einer Person aufrufen.</td>
+        <td>Versicherte können über die Portale und Apps der Sozialversicherung alle offenen Kassenrezepte einsehen, die für sie selbst sowie für Mitversicherte unter 14 Jahren ausgestellt wurden.<br/>Eine Ärztin bzw. ein Arzt kann jene e-Rezepte einsehen, die sie oder er selbst ausgestellt hat, nicht aber solche e-Rezepte, die andere Ärztinnen bzw. Ärzte ausgestellt haben.<br/>Apotheken erhalten durch Scan des e-Rezept Codes oder Eingabe der e-Rezept ID Zugriff auf EIN bestimmtes e-Rezept. Durch Stecken der e-card oder Nutzung der NFC-Funktion können Apotheken ALLE offenen e-Rezepte einer Person aufrufen.</td>
     </tr>
 </table>
 
@@ -78,7 +72,7 @@ gültig sind. Die Beschreibung enthält Festlegungen, Einschränkungen und Bedin
 Der vorliegende Implementierungsleitfaden basiert auf der grundlegenden Implementierungsvorschrift für alle CDA Dokumente im österreichischen Gesundheitswesen.
 Die CDA Dokumente der e-Medikation haben grundsätzlich den beiden aufeinander aufbauenden Implementierungsleitfäden zu folgen.
 
-![Zusammenspiel der Implementierungsleitfäden](/input/images/Zusammenspiel_der_Implementierungsleitfäden.jpg)
+![Zusammenspiel der Implementierungsleitfäden](input/images/Zusammenspiel_der_Implementierungsleitfäden.jpg)
 
 Die administrativen Daten im Dokumentheader und grundsätzliche Vorgaben für den medizinischen Inhalt werden vom „Allgemeinen Implementierungsleitfaden“ definiert. Der jeweilige „Spezielle Implementierungsleitfaden“ enthält die Vorgaben für die medizinischen Inhalte und ergänzt gegebenenfalls die Header-Vorgaben.
 
