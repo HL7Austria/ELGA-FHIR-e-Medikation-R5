@@ -9,6 +9,7 @@
         <div id="allgemein" class="tab-pane fade in active">
             <h3 id="allgemein"></h3>
             <h4 id="akteure">Akteure</h4>
+
 <p>Folgende Akteure werden in der ELGA-Anwendung e-Medikation (eMEDAT) definiert:</p>
 <ul>
 <li>Akteure im niedergelassenen Bereich<ul>
@@ -85,6 +86,7 @@
 
         </div>
         <div id="pres_create" class="tab-pane fade">
+        
 <h3 id="pres_create"></h3>
 <p>Im Zuge der Behandlung stellt der Arzt fest, dass dem ELGA Teilnehmer ein oder mehrere Arzneimittel verordnet werden müssen. Eine Verordnung besteht immer nur aus genau einer Medikation (= ein Arzneimittel). Das Rezept kann aus mehreren Verordnungen bestehen und bildet somit die Klammer über die Verordnungen. Das Rezept mit den Verordnungen wird mit einer eindeutigen eMED-ID versehen.
 Die Prüfungen der Arzneimittel z.B. auf potentielle Wechselwirkungen, Kontraindikationen, Dosierungen, etc. erfolgt in der Eigenverantwortung des Arztes und ist nicht Gegenstand der e-Medikation.

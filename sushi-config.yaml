@@ -54,6 +54,8 @@ pages:
    title: Intro & Differentiation (en)
  usecase_0_de.md:
    title: Anwendungsfälle (de)
+ usecase_de.md:
+   title: Anwendungsfälle onepager (de)
  usecase_en.md:
    title: Use Cases (en)
  support_de.md:
