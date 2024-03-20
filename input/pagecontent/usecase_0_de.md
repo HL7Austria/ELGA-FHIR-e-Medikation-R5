@@ -7,7 +7,7 @@
     </ul>
     <div class="tab-content">
         <div id="allgemein" class="tab-pane fade in active">
-            {% include usecase_1_general_de.html %}
+            {% include usecase_1_general_de.md %}
         </div>
         <div id="verordnung-rezept-abrufen" class="tab-pane fade">
 Im Zuge der Behandlung stellt der Arzt fest, dass dem ELGA Teilnehmer ein oder mehrere Arzneimittel verordnet werden müssen. Eine Verordnung besteht immer nur aus genau einer Medikation (= ein Arzneimittel). Das Rezept kann aus mehreren Verordnungen bestehen und bildet somit die Klammer über die Verordnungen. Das Rezept mit den Verordnungen wird mit einer eindeutigen eMED-ID versehen.
