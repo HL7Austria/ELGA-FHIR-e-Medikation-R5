@@ -38,7 +38,8 @@
   <body onload="document.body.style.opacity='1'">
 {% assign label = {{site.data.pages[page.path].label}} | split: '.0' %}
 	  <script src="{{site.data.info.assets}}assets/js/prism.js"></script>
-
+    <!-- Requires jQuery! -->
+    <script src="https://jira-neu.elga.gv.at/plugins/servlet/issueCollectorBootstrap.js?collectorId=3717b402&locale=de_DE"></script>
     <style type="text/css">h2{--heading-prefix:"{{site.data.info.headingOffset}}{{label}}"}
     h3,h4,h5,h6{--heading-prefix:"{{site.data.info.headingOffset}}{{site.data.pages[page.path].label}}"}</style>
     <div id="segment-header" class="segment">  <!-- segment-header -->

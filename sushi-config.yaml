@@ -44,22 +44,22 @@ publisher:
 # sub-pages.
 #
 pages:
- index.md:
-   title: Home - Informationen über diesen Leitfaden (de)
- index_en.md:
-   title: Home - Information about this implementation guide (en) 
- intro_de.md:
-   title: Einleitung & Abgrenzung (de)
- intro_en.md:
-   title: Intro & Differentiation (en)
- usecase_de.md:
-   title: Anwendungsfälle (de)
- usecase_en.md:
-   title: Use Cases (en)
- support_de.md:
-   title: Support & Impressum (de)
- support_en.md:
-   title: Support & Imprint (en)
+  index.md:
+    title: Home - Informationen über diesen Leitfaden (de)
+  intro_de.md:
+    title: Einleitung & Abgrenzung (de)
+  usecase_de.md:
+    title: Anwendungsfälle (de)
+  support_de.md:
+    title: Support & Impressum (de)
+  index_en.md:
+    title: Home - Information about this implementation guide (en) 
+  intro_en.md:
+    title: Intro & Differentiation (en)
+  usecase_en.md:
+    title: Use Cases (en)
+  support_en.md:
+    title: Support & Imprint (en)
 #
 #
 # The parameters property represents IG.definition.parameter. Rather
