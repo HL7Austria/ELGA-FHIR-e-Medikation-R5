@@ -1,10 +1,10 @@
 <ul xmlns="http://www.w3.org/1999/xhtml" class="nav navbar-nav">
+  <li><a href="toc.html">Table of Contents</a></li>
   <li><a href="index.html">Home</a></li>
   <li><a href="intro_de.html">Intro</a></li>
   <li><a href="usecase_de.html">Use Cases</a></li>
-  <li><a href="toc.html">Table of Contents</a></li>
-  <li><a href="artifacts.html">Artifacts</a></li>
   <li><a href="support_de.html">Support &amp; Imprint</a></li>
+  <li><a href="artifacts.html">Artifacts</a></li>
   <!--<li><a href="user_stories_noscroll.html">User Stories</a></li>
   <li><a href="technical_information.html">Technical Information</a></li>
 	<li class="dropdown">
