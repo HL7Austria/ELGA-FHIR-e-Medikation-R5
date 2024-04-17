@@ -38,7 +38,24 @@
   <body onload="document.body.style.opacity='1'">
 {% assign label = {{site.data.pages[page.path].label}} | split: '.0' %}
 	  <script src="{{site.data.info.assets}}assets/js/prism.js"></script>
-
+    <script src="https://giscus.app/client.js"
+        data-repo="HL7Austria/ELGA-FHIR-e-Medikation-R5"
+        data-repo-id="R_kgDOLhyFQQ"
+        data-category="Comment"
+        data-category-id="DIC_kwDOLhyFQc4Cev5-"
+        data-mapping="pathname"
+        data-strict="0"
+        data-reactions-enabled="1"
+        data-emit-metadata="0"
+        data-input-position="bottom"
+        data-theme="light"
+        data-lang="de"
+        crossorigin="anonymous"
+        async>
+    </script>
+    <div id="comment_header">
+      <giscus style="color: #fff; float: right;" />
+    </div>
     <style type="text/css">h2{--heading-prefix:"{{site.data.info.headingOffset}}{{label}}"}
     h3,h4,h5,h6{--heading-prefix:"{{site.data.info.headingOffset}}{{site.data.pages[page.path].label}}"}</style>
     <div id="segment-header" class="segment">  <!-- segment-header -->
