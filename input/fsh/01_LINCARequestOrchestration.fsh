@@ -20,9 +20,13 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * intent ^short = "	The prescription represents a request/demand and authorization for action by the requestor. | Das Rezept stellt eine Anfrage/Anforderung und Ermächtigung zum Handeln durch den Antragsteller dar."
 
 * code 1..1
-* code from $medRezArt (required) //austria specific
-* code ^short = "Prescription type | Rezeptart"
+* code from $medRezArt (required) 
+* code ^short = "Prescription type, default 'Kassen', still must be stated | Rezeptart, standardmäßig „Kassen“, muss jedoch angegeben werden"
 
 * subject 1..1
-* subject ^short = "Creator of the proposal (reference to the patient is created by each MedicationRequest!) | Ersteller des Rezepts (der Verweis auf den Patienten steht in jedem MedicationRequest!)"
-* subject only Reference(CareTeam or Organization or Practitioner) //austria specific, austrianOrganization and so on?
+* subject only Reference(HL7ATCorePatient)
+* subject ^short = "Associated HL7 Austria patient. | Zugewiesener HL7 AustriaPatient"
+
+* author 1..1
+* author only Reference(Practitioner) //austria specific, austrianOrganization and so on?
+* author ^short = "Creator of the proposal | Ersteller des Rezepts"
