@@ -20,7 +20,7 @@ Description: "**Description:** In the course of treatment, the doctor determines
 //* medication only CodeableReference(eMedMedications) // ToDo check why the linca guys did this 
 * medication.reference 0..0
 * medication.concept 1..1 
-* medication.concept from $asp-liste 
+* medication from $asp-liste 
 * medication ^short = "Medication in conformance with the ELGA e-Medication used PZN (i.e. ASP-Liste). | Arzneimittel entsprechend der ELGA e-Medikation verwendet PZN (d.h. ASP-Liste)."
 
 * subject only Reference(HL7ATCorePatient)
