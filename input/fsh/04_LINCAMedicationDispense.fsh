@@ -10,7 +10,7 @@ Description: "Linked Care  Profile for dispense documentation. The dispense must
 * status = #completed
 * status ^short = "A dispense ends the chain of the workflow. Therefore the status is fixed to 'completed'"
 * authorizingPrescription 1..1
-* authorizingPrescription only Reference(LINCAPrescriptionMedicationRequest)
+* authorizingPrescription only Reference(eMedRequest)
 * authorizingPrescription ^short = "Prescription that authorized dispense of this medication"
 * performer.actor 1..1
 * performer.actor only Reference(Organization)
