@@ -18,7 +18,9 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * intent ^short = "	The prescription represents a request/demand and authorization for action by the requestor. | Das Rezept stellt eine Anfrage/Anforderung und Ermächtigung zum Handeln durch den Antragsteller dar."
 
 //* medication only CodeableReference(eMedMedications) // ToDo check why the linca guys did this 
-* medication from $asp-liste 
+* medication.reference 0..0
+* medication.concept 1..1 
+* medication.concept from $asp-liste 
 * medication ^short = "Medication in conformance with the ELGA e-Medication used PZN (i.e. ASP-Liste). | Arzneimittel entsprechend der ELGA e-Medikation verwendet PZN (d.h. ASP-Liste)."
 
 * subject only Reference(HL7ATCorePatient)
