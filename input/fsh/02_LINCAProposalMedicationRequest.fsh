@@ -40,10 +40,15 @@ Description: "**Description:** In the course of treatment, the doctor determines
 
 * effectiveDosePeriod ^short = "Period over which the medication is to be taken | Zeitraum, über den das Medikament eingenommen werden soll"
 
-* dosageInstruction.timing ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
-* dosageInstruction.timing.repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
-* dosageInstruction.timing.repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
-* dosageInstruction.timing.repeat.periodUnit ^short = "Unit of period | Einheit zur Dauer"
+* dosageInstruction.timing contains period or split
+* dosageInstruction.timing[period] ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
+* dosageInstruction.timing[period].repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
+* dosageInstruction.timing[period].repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
+* dosageInstruction.timing[period].repeat.periodUnit ^short = "Unit of period | Einheit zur Dauer"
 
-* dosageInstruction.doseAndRate.doseQuantity.code from $DoseForm
+* dosageInstruction.timing[split] ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
+* dosageInstruction.timing[split].repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
+* dosageInstruction.timing[split].repeat.when ^short = "Code for time period of occurrence | Code für die Eintrittszeitspanne"
+
+* dosageInstruction.doseAndRate.doseQuantity.code from $DoseForm //ToDo
 * dosageInstruction.doseAndRate.doseQuantity.code ^short = "ToDo look into last LINCA solution for doseQuantitiy"
