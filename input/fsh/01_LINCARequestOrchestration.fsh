@@ -9,7 +9,7 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * id ^short = "eMED-ID" //austria specific
 * contained 1..*
 * contained ^short = "one or several MedicationRequests | eine oder mehrere Verordnungen/MedicationRequests"
-* contained only LINCAProposalMedicationRequest
+* contained only eMedRequest
 * status = #completed 
 * status ^short = "For CDA compatability: always completed, even if the prescription is still be acted upon. | Für CDA-Kompatibilität: immer abgeschlossen, auch wenn das Rezept noch bearbeitet werden muss."
 * intent = #order
