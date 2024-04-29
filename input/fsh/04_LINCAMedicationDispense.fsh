@@ -4,7 +4,7 @@ Id: linca-dipsense-documentation
 Title: "LINCA Dispense (LINCAMedicationDispense)"
 Description: "Linked Care  Profile for dispense documentation. The dispense must be documented by the dispensing pharmacist and specify if an order was fulfilled completly or partially. The LINCA Dispense must have an LINCA Prescription as authorizingPrescription. "
 * medication 1..1 
-* medication only CodeableReference(LINCAMeds)
+* medication only CodeableReference(eMedMedications)
 * medication from $asp-liste
 * medication ^short = "Medication that was dispensed, in conformance with ELGA CodeSystems (text-only, or text and number referencing one of the supported catalogs, as for example the PZN of the Austrian ASP)."
 * status = #completed

@@ -1,7 +1,7 @@
-Profile: LINCAMeds 
+Profile: eMedMedications
 Parent: Medication
-Id: linca-medication 
-Title: "LINCA Medication (LINCAMeds)"
-Description: "Linked Care profile for Medication Resource to ensure ELGA compliant representation. Bind code to ELGA CodeSystem ('asp-liste') and doseForm to ELGA ValueSet ('elga-medikationdarreichungsform'). "
+Id: eMed-medications 
+Title: "ELGA e-Medication Medications (eMedMedications)"
+Description: "Medication Resource to ensure ELGA e-Medication compliant representation. Binding code to ELGA CodeSystem ('asp-liste') and doseForm to ELGA ValueSet ('elga-medikationdarreichungsform'). "
 * code from $asp-liste
 * doseForm from $DoseForm
