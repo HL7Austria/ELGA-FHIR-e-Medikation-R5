@@ -40,7 +40,7 @@ Description: "**Description:** In the course of treatment, the doctor determines
 
 * effectiveDosePeriod ^short = "Period over which the medication is to be taken | Zeitraum, über den das Medikament eingenommen werden soll"
 
-* dosageInstruction.timing contains period or split
+* dosageInstruction.timing contains period and split
 * dosageInstruction.timing[period] ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
 * dosageInstruction.timing[period].repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
 * dosageInstruction.timing[period].repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
