@@ -19,6 +19,7 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * intent = #order
 * intent ^short = "	The prescription represents a request/demand and authorization for action by the requestor. | Das Rezept stellt eine Anfrage/Anforderung und Ermächtigung zum Handeln durch den Antragsteller dar."
 
+* code 1..1
 * code from $medRezArt (required) //austria specific
 * code ^short = "Prescription type | Rezeptart"
 
