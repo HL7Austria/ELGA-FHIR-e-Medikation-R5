@@ -41,19 +41,19 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * effectiveDosePeriod ^short = "Period over which the medication is to be taken | Zeitraum, über den das Medikament eingenommen werden soll"
 
 //Slice for Identifier, order matters
-* dosageInstruction.timing ^slicing.rules = #open
+* dosageInstruction ^slicing.rules = #open
 //* dosageInstruction.timing ^slicing.discriminator.type = #value
 //* dosageInstruction.timing ^slicing.discriminator.path = "type.coding.code"
-* dosageInstruction.timing ^slicing.ordered = false
-* dosageInstruction.timing contains period 0..1 or split 0..1
-* dosageInstruction.timing[period] ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
-* dosageInstruction.timing[period].repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
-* dosageInstruction.timing[period].repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
-* dosageInstruction.timing[period].repeat.periodUnit ^short = "Unit of period | Einheit zur Dauer"
+* dosageInstruction ^slicing.ordered = false
+* dosageInstruction contains period 0..1 or split 0..1
+* dosageInstruction[period].timing ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
+* dosageInstruction[period].timing.repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
+* dosageInstruction[period].timing.repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
+* dosageInstruction[period].timing.repeat.periodUnit ^short = "Unit of period | Einheit zur Dauer"
 
-* dosageInstruction.timing[split] ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
-* dosageInstruction.timing[split].repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
-* dosageInstruction.timing[split].repeat.when ^short = "Code for time period of occurrence | Code für die Eintrittszeitspanne"
+* dosageInstruction[split].timing ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
+* dosageInstruction[split].timing.repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
+* dosageInstruction[split].timing.repeat.when ^short = "Code for time period of occurrence | Code für die Eintrittszeitspanne"
 
 * dosageInstruction.doseAndRate.doseQuantity.code from $DoseForm //ToDo
 * dosageInstruction.doseAndRate.doseQuantity.code ^short = "ToDo look into last LINCA solution for doseQuantitiy"
