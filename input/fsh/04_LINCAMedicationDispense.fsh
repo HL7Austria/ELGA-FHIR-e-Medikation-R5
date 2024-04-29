@@ -3,10 +3,12 @@ Parent: MedicationDispense
 Id: linca-dipsense-documentation
 Title: "LINCA Dispense (LINCAMedicationDispense)"
 Description: "Linked Care  Profile for dispense documentation. The dispense must be documented by the dispensing pharmacist and specify if an order was fulfilled completly or partially. The LINCA Dispense must have an LINCA Prescription as authorizingPrescription. "
-* medication 1..1 
-* medication only CodeableReference(eMedMedications)
-* medication from $asp-liste
-* medication ^short = "Medication that was dispensed, in conformance with ELGA CodeSystems (text-only, or text and number referencing one of the supported catalogs, as for example the PZN of the Austrian ASP)."
+
+* medication.reference 0..0
+* medication.concept 1..1 
+* medication from $asp-liste 
+* medication ^short = "Medication in conformance with the ELGA e-Medication used PZN (i.e. ASP-Liste). | Arzneimittel entsprechend der ELGA e-Medikation verwendet PZN (d.h. ASP-Liste)."
+
 * status = #completed
 * status ^short = "A dispense ends the chain of the workflow. Therefore the status is fixed to 'completed'"
 * authorizingPrescription 1..1

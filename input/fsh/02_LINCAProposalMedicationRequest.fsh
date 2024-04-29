@@ -17,7 +17,6 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * intent = #order
 * intent ^short = "	The prescription represents a request/demand and authorization for action by the requestor. | Das Rezept stellt eine Anfrage/Anforderung und Ermächtigung zum Handeln durch den Antragsteller dar."
 
-//* medication only CodeableReference(eMedMedications) // ToDo check why the linca guys did this 
 * medication.reference 0..0
 * medication.concept 1..1 
 * medication from $asp-liste 
