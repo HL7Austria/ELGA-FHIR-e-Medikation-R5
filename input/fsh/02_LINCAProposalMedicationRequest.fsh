@@ -53,7 +53,9 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * dosageInstruction.doseAndRate.doseQuantity.value ^short = "Quantity per intake | Menge pro Einnahme"
 * dosageInstruction.doseAndRate.doseQuantity.unit ^short = "Unit for quantity per intake | Einheit zur Menge pro Einnahme"
 //* dosageInstruction.doseAndRate.doseQuantity.code from $DoseForm (extensible)
-* dosageInstruction.doseAndRate.rate 0..0
-* dosageInstruction.doseAndRate.rate ^short = "Do not use this rate element for repetitions, period or any other time related information. Use timing instead. | Verwenden Sie für Wiederholungen, Perioden oder andere zeitbezogene Informationen nicht dieses rate-Feld. Verwenden Sie stattdessen timing."
+* dosageInstruction.doseAndRate.rateRatio ^short = "Do not use any rate element for repetitions, period or any other time related information. Use timing instead. | Verwenden Sie für Wiederholungen, Perioden oder andere zeitbezogene Informationen keine der rate-Elemente. Verwenden Sie stattdessen timing."
+* dosageInstruction.doseAndRate.rateRatio 0..0
+* dosageInstruction.doseAndRate.rateRange 0..0
+* dosageInstruction.doseAndRate.rateQuantity 0..0
 
 * dispenseRequest.numberOfRepeatsAllowed ^short = "	Number of refills authorized | Anzahl der genehmigten Einlösungen"
