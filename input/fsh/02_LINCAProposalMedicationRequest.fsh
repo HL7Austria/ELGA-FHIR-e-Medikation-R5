@@ -38,22 +38,22 @@ Description: "**Description:** In the course of treatment, the doctor determines
 
 //* supportingInformation ^short = "First Element is reserved for reference to origin (LINCARequestOrchestration) assigned on LinkedCare Platform. Used to link instantiated proposal items back to the proposal header (LINCARequestOrchestration)."
 
+* note ^short = "CDA eMed v2: ZINFO || not machine readable Information about the MedicationRequests | nicht maschinenlesbare Informationen über die Verordnung"
+
 * effectiveDosePeriod ^short = "Period over which the medication is to be taken | Zeitraum, über den das Medikament eingenommen werden soll"
 
-//Slice for Identifier, order matters
-//* dosageInstruction ^slicing.rules = #open
-//* dosageInstruction.timing ^slicing.discriminator.type = #value
-//* dosageInstruction.timing ^slicing.discriminator.path = "type.coding.code"
-//* dosageInstruction ^slicing.ordered = false
-//* dosageInstruction contains period 0..1 or split 0..1
-* dosageInstruction[period].timing ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
-* dosageInstruction[period].timing.repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
-* dosageInstruction[period].timing.repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
-* dosageInstruction[period].timing.repeat.periodUnit ^short = "Unit of period | Einheit zur Dauer"
+* dosageInstruction ^short = "One or more specific instructions for how the medication should be taken | Eine oder mehrere spezifische Anweisungen für die Einnahme des Medikaments"
+* dosageInstruction.patientInstruction ^short = "CDA eMed v2: ALTEIN || Patient or consumer oriented instructions | Patienten- oder verbraucherorientierte Anweisungen"
+* dosageInstruction.timing.repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
+* dosageInstruction.timing.repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
+* dosageInstruction.timing.repeat.periodUnit ^short = "Unit of period | Einheit zur Dauer"
+* dosageInstruction.timing.repeat.when ^short = "Code for time period of occurrence | Code für die Eintrittszeitspanne"
+* dosageInstruction.asNeeded ^short = "Take 'as needed' | Bedarfsmedikation"
 
-* dosageInstruction[split].timing ^short = "When medication should be administered | Wann Medikamente verabreicht werden sollten"
-* dosageInstruction[split].timing.repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
-* dosageInstruction[split].timing.repeat.when ^short = "Code for time period of occurrence | Code für die Eintrittszeitspanne"
+* dosageInstruction.doseAndRate.doseQuantity.value ^short = "Quantity per intake | Menge pro Einnahme"
+* dosageInstruction.doseAndRate.doseQuantity.unit ^short = "Unit for quantity per intake | Einheit zur Menge pro Einnahme"
+//* dosageInstruction.doseAndRate.doseQuantity.code from $DoseForm (extensible)
+* dosageInstruction.doseAndRate.rate 0..0
+* dosageInstruction.doseAndRate.rate ^short = "Do not use this rate element for repetitions, period or any other time related information. Use timing instead. | Verwenden Sie für Wiederholungen, Perioden oder andere zeitbezogene Informationen nicht dieses rate-Feld. Verwenden Sie stattdessen timing."
 
-* dosageInstruction.doseAndRate.doseQuantity.code from $DoseForm //ToDo
-* dosageInstruction.doseAndRate.doseQuantity.code ^short = "ToDo look into last LINCA solution for doseQuantitiy"
+* dispenseRequest.numberOfRepeatsAllowed ^short = "	Number of refills authorized | Anzahl der genehmigten Einlösungen"
