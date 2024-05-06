@@ -15,8 +15,8 @@ Instance: Example-eMedRequest
 InstanceOf: eMedRequest
 Description: "Example of a eMedRequest as MedicationRequest with data as similar as possible to the first entry/'Verordnung' of https://gitlab.com/elga-gmbh/cda-beispielbefunde/-/blob/master/Basisleitf%C3%A4den_(2.06.2)/ELGA-083-e-Medikation_1-Rezept_mit_Verordnungen1-4%20Dosierungsvarianten%20an%20EINEM%20Tag.xml?ref_type=headshttps://gitlab.com/elga-gmbh/cda-beispielbefunde/-/blob/master/Basisleitf%C3%A4den_(2.06.2)/ELGA-083-e-Medikation_1-Rezept_mit_Verordnungen1-4%20Dosierungsvarianten%20an%20EINEM%20Tag.xml"
 Usage: #example
-* identifier.value = WYE82A2G8EEW-4711
-* groupIdentifier.value = WYE82A2G8EE1
+* identifier.value = "WYE82A2G8EEW-4711"
+* groupIdentifier.value = "WYE82A2G8EE1"
 * status = #completed
 * intent = #order
 * medication.concept = $asp-liste#981417 "CIPROXIN FTBL 500MG"
