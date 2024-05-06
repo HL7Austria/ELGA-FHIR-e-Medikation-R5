@@ -27,6 +27,9 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * subject only Reference(HL7ATCorePatient)
 * subject ^short = "Associated HL7 Austria patient. | Zugewiesener HL7 AustriaPatient"
 
+* authoredOn 1..1
+* authoredOn ^short = "When the prescription was authored | Wann das Rezept verfasst wurde"
+
 * author 1..1
 * author only Reference(Practitioner) //austria specific, austrianOrganization and so on?
 * author ^short = "Creator of the proposal | Ersteller des Rezepts"

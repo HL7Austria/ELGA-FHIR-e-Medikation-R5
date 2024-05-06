@@ -25,7 +25,7 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * medication from $asp-liste 
 * medication ^short = "Medication in conformance with the ELGA e-Medication used PZN (i.e. ASP-Liste). | Arzneimittel entsprechend der ELGA e-Medikation verwendet PZN (d.h. ASP-Liste)."
 
-* subject only Reference(HL7ATCorePatient)
+* subject only Reference(HL7ATCorePatient) //TODO kill redundancy here? 
 * subject ^short = "Each MedicationRequest is associated with one HL7 Austria patient. | Jede Verordnung/MedicationRequest ist einem HL7 AustriaPatient zugewiesen."
 
 //* basedOn 0..1
@@ -47,6 +47,7 @@ Description: "**Description:** In the course of treatment, the doctor determines
 * dosageInstruction.timing.repeat.frequency ^short = "Repetitions within the period | Wiederholungen innerhalb der Dauer"
 * dosageInstruction.timing.repeat.period ^short = "A defined period with its duration to which the frequency applies | Ein bestimmter Zeitraum mit seiner Dauer, für den die Wiederholungen gelten"
 * dosageInstruction.timing.repeat.periodUnit ^short = "Unit of period | Einheit zur Dauer"
+* dosageInstruction.timing.repeat.when from http://hl7.org/fhir/ValueSet/event-timing
 * dosageInstruction.timing.repeat.when ^short = "Code for time period of occurrence | Code für die Eintrittszeitspanne"
 * dosageInstruction.asNeeded ^short = "Take 'as needed' | Bedarfsmedikation"
 
