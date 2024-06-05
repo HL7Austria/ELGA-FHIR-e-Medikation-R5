@@ -74,7 +74,7 @@ Eine Speicherung von Verordnungen ohne Zuordnung eines Rezeptes ist nicht gülti
 Die Erfassung eines Rezepts mit Verordnung stellt folgende Prozessschritte in der GDA- Software dar:
 -	Arzneimittel auswählen: Der Arzt wählt eine oder mehrere Arzneimittelspezialitäten aus einem Katalog („ASP-Liste“, die Liste der humanen Arzneispezialitäten gelistet nach PZN) aus, wobei Handelsname, Pharmazentralnummer (PZN) sowie andere Daten zur Beschreibung des Arzneimittels (Stärke, Darreichungsform, Packungsgröße, Zulassungsnummer etc.) automatisch aus einem Katalog6 mit allen ELGA-relevanten Arzneimittelspezialitäten übernommen werden können.
 -	eMED-ID anfordern: Die Vergabe der eindeutigen eMED-ID erfolgt zentral durch die Serverkomponente e-Medikation und kann über eine entsprechende Schnittstelle angefordert werden.
--	Arzneimittel ausnehmen: Arzneimittel können von der Speicherung in e-Medikation ausgenommen werden (funktionale Anforderung an die GDA-Software, siehe ELGA Usability-Styleguide & Situatives Opt-Out [2],[3],[4])
+-	Arzneimittel ausnehmen: Arzneimittel können von der Speicherung in e-Medikation ausgenommen werden (funktionale Anforderung an die GDA-Software)
 -	Rezept mit Verordnung in e-Medikation speichern: Prüfung der Eingabedaten
 -	Rezept drucken (Anforderung an die GDA-Software, kein Teil in der e-Medikation). Die eMED-ID soll, sofern technisch möglich, sowohl als Klartext als auch als maschinenlesbarer Code (2D-Matrix-Code) auf dem e-Rezept-Ausdruck bzw. einem Papierrezept aufgedruckt werden (§18 Abs. 4 Z. 4 GTelG 2012) um die Versorgungskontinuität (verbesserte Arbeitsabläufe) als auch die anwenderfreundlichen Umsetzung der e-Medikation zu unterstützen.
 
@@ -85,12 +85,12 @@ Der Arzt kann pro „Patientenkontakt“ (Besuch) mehrere Rezepte mit Verordnung
 ##### Anmerkungen zu den Datenfeldern:
 
 Das Rezept wird durch eine Rezeptart gekennzeichnet, um die Gültigkeitsdauer prüfen zu können. In e-Medikation werden folgende Rezeptarten berücksichtigt:
--	Kassenrezept – 1 Monat gültig; eine Einlösung möglich; im Zuge des „Besorgerprozesses“ wird bei einer gespeicherten Teilabgabe die gesamte Gültigkeitsdauer auf 3 Monate verlängert
+-	Kassenrezept – 1 Monat gültig und entspricht dem Zeitraum vom Ausstellungszeitpunkt bis zum gleichen Tag im Folgemonat 23:59 Uhr; eine Einlösung möglich; im Zuge des „Besorgerprozesses“ wird bei einer gespeicherten Teilabgabe die gesamte Gültigkeitsdauer auf 3 Monate verlängert
 Es ist nicht möglich, zusätzliche Einlösungen anzugeben.
--	Privatrezept - 1 Monat gültig
-    -	Die Gültigkeitsdauer von 1 Monat bezieht sich auf die erste Einlösung. Der Akteur kann eine erweiterte Gültigkeitsdauer mit maximal einem Jahr festlegen.
-    -	bis zu 365 Tage bzw. bis zu 6 Einlösungen, wobei Gültigkeitsdauer und Anzahl der möglichen Einlösungen vom Arzt definiert werden können.  Dabei muss das Privatrezept innerhalb des ersten Monats erstmalig eingelöst werden (§ 4 Abs. 1 RezeptpflichtG).
--	Substitutionsrezept – Maximale Gültigkeitsdauer von 24 Monaten. Das GültigVon Datum darf maximal einen Monat in der Zukunft liegen. 
+    - Beispiel: Wenn ein Kassenrezept am 1.4., 16:45 Uhr ausgestellt wird, dann ist es bis 2.5., 00:01 Uhr gültig. Möglicherweise führt das erwähnte „add_month“ dazu, dass die die Gültigkeit in dem Fall auf die Uhrzeit genau, also auf 2.5., 16:45 Uhr gesetzt wird, was dann zu dem Fehler führt.
+-	Privatrezept - 12 Monate gültig, sofern die erste Einlösung innerhalb von 1 Monat ab Erstelldatum erfolgt ist
+    -	Die maximale Gültigkeitsdauer beträgt 365 Tage bzw. sind bis zu 6 Einlösungen möglich, wobei Gültigkeitsdauer und Anzahl der möglichen Einlösungen vom Arzt definiert werden können. Dabei muss das Privatrezept innerhalb des ersten Monats erstmalig eingelöst werden (§ 4 Abs. 1 RezeptpflichtG).
+-	Substitutionsrezept – Maximale Gültigkeitsdauer von 12 Monaten. Das GültigVon Datum darf maximal einen Monat in der Zukunft liegen. 
 Es ist nicht möglich, zusätzliche Einlösungen anzugeben. 
 
 Die Gültigkeitsdauer je Rezeptart folgt den rechtlichen Vorgaben. Es wird daher der Ausstellungstag in die Berechnung der Einlösefrist nicht mit eingerechnet. Die Gültigkeiten von Rezepten und somit die Verfügbarkeit in e-Medikation ergeben sich folgendermaßen:
@@ -332,7 +332,7 @@ Im Zuge der Behandlung eines ELGA Teilnehmers kann der Akteur die Medikationsabg
 
 #### Vorbedingung
 -	ELGA-Vorbedingung: GDA ist autorisiert, ELGA Teilnehmer ist identifiziert, eine gültige Kontaktbestätigung/Berechtigung („Ticket“) wurde vom ELGA-Berechtigungssystem ausgestellt.
--	e-Medikation Vorbedingung: Abgaben in den letzten 365 Tagen vorhanden
+-	e-Medikation Vorbedingung: Abgaben in den letzten 18 Monaten vorhanden
 
 #### Akteure
 -	Arzt im niedergelassenen Bereich
@@ -423,6 +423,7 @@ Der Akteur muss die Daten einer Medikationsabgabe ändern können (z.B. bei Eins
 -	Arzt im niedergelassenen Bereich
 -	Krankenanstalt
 -	Apotheke
+-   Einrichtungen der Pflege
 
 #### Ablauf
 
