@@ -24,7 +24,7 @@ Folgende Akteure werden in der ELGA-Anwendung e-Medikation (eMEDAT) definiert:
     -	Pflegeperson (siehe Vertreter, Vollmachtnehmer)
 -	ELGA-Teilnehmer
     -	Vertreter 
-        - Ombudsstelle
+        - ELGA-Ombudsstelle
         - Vollmachtnehmer
         - gesetzlicher Vertreter
         - etc.
@@ -338,7 +338,7 @@ Im Zuge der Behandlung eines ELGA Teilnehmers kann der Akteur die Medikationsabg
 -	Arzt im niedergelassenen Bereich
 -	Krankenanstalt
 -	Apotheke
--	Pflege
+-	Einrichtung der Pflege
 
 #### Ablauf
 Der Akteur fragt die Medikationsabgabe des identifizierten ELGA-Teilnehmers ab. Folgende Filterungen/Suchfunktionen können vorgenommen werden:
@@ -365,7 +365,7 @@ Der Akteur muss die Abgabe stornieren können (z.B. wenn irrtümlich eine Abgabe
 -	Arzt im niedergelassenen Bereich
 -	Apotheke
 -	Krankenanstalt
--	Pflege
+-	Einrichtung der Pflege
 
 #### Ablauf
 Der Akteur wählt die Medikationsabgabe, welche storniert werden soll. Die Stornierung  von Abgaben ist jederzeit möglich. Die Abgabe erhält den Status=STORNIERT und kann nicht mehr abgerufen werden. Handelt es sich bei der Abgabe um eine Medikation mit Verordnungsbezug, dann wechselt der Status der Verordnung auf „OFFEN“oder – falls der Gültigkeitszeitraum des zugrunde liegenden Rezepts überschritten wurde – auf „ABGELAUFEN“
@@ -392,7 +392,7 @@ Im Patientengespräch erfährt der Akteur, dass eine erfolgte Medikationsabgabe 
 -	Arzt im niedergelassenen Bereich
 -	Krankenanstalt
 -	Apotheke
--	Pflege
+-	Einrichtung der Pflege
 
 #### Ablauf
 
@@ -461,7 +461,7 @@ Im Zuge der Behandlung eines ELGA Teilnehmers möchte der Akteur die Medikations
 -	Arzt im niedergelassenen Bereich
 -	Krankenanstalt
 -	Apotheke
--	Pflege
+-	Einrichtung der Pflege
 -	ELGA-Teilnehmer
 
 #### Ablauf
