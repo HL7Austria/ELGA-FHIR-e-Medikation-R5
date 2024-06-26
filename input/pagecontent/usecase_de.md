@@ -100,10 +100,7 @@ Rezept/Verordnung den Status OFFEN.
 - Ein Kassenrezept muss innerhalb von 1 Monat eingelöst werden, sonst erhält das Rezept den Status ABGELAUFEN.
 - Ein Privatrezept muss innerhalb von 1 Monat eingelöst werden, sonst erhält es den Status ABGELAUFEN.
 - Ein Substitutionsrezept ist im Status ABGELAUFEN, wenn das „bis Datum“ erreicht ist.
-- Die Anzahl der Einlösungen bei Privatrezepten, gibt an wie viele Einlösungen auf ein Rezept durchgeführt werden dürfen bis die Verordnung auf dem Rezept und das Rezept
-den Status=EINGELÖST erhält. Anzahl der Einlösungen bezieht sich immer auf ein
-Rezept. Solange die Anzahl der Einlösungen (Abgaben) nicht erreicht wurde, hat die
-Verordnung und Rezept den Status=OFFEN.
+- Die Anzahl der Einlösungen bei Privatrezepten werden auf Verordnungsebene geprüft. Sobald die maximale Anzahl der Einlösungen für jede einzelne Verordnung erreicht ist, erhält das Rezept den Status=EINGELÖST. Solange die Anzahl der Einlösungen (Abgaben) nicht erreicht wurde, hat die Verordnung und das Rezept den Status=OFFEN.
 - Die Rezeptart beeinflusst die Regeln, die bei der Einlösung der Verordnung zur Anwendung kommen. ist für die Regeln der Einlösung notwendig. Siehe dazu Use Cases „Abgabe mittels eMED-ID durchführen“ und „Abgabe über e-card durchführen“. 
 Es können nur Arzneimittel verordnet werden, die in der Liste der Arzneimittelspezialitäten
 („ASP-Liste“) vorkommen und als gültig vermerkt sind (ELGA_Gültigkeit = true). Ohne
