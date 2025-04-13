@@ -2,16 +2,6 @@
 
 (function () {
 
-  const currentScript = document.currentScript;
-  const parentDiv = currentScript.parentElement;
-
-  const giscusContainer = document.createElement('div');
-  giscusContainer.className = 'giscus';
-  document.body.appendChild(giscusContainer);
-  
-  parentDiv.insertBefore(giscusContainer, currentScript);
-
-
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
     script.type = 'text/javascript';
@@ -28,7 +18,7 @@
     script.crossOrigin = 'anonymous';
     script.async = true;
   
-    parentDiv.appendChild(script);
+    document.body.appendChild(script);
 
     console.log('[Giscus] embed script added');
   })();
