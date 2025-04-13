@@ -1,4 +1,4 @@
-// giscus-embed.js
+// embed-giscus.js
 
 (function () {
   const giscusContainer = document.createElement('div');
