@@ -1,8 +1,13 @@
 // giscus-embed.js
 
 (function () {
+  const giscusContainer = document.createElement('div');
+  giscusContainer.className = 'giscus';
+  document.body.appendChild(giscusContainer);
+
     const script = document.createElement('script');
     script.src = 'https://giscus.app/client.js';
+    script.type = 'text/javascript';
     script.setAttribute('data-repo', 'HL7Austria/ELGA-FHIR-e-Medikation-R5');
     script.setAttribute('data-repo-id', 'R_kgDOLhyFQQ');
     script.setAttribute('data-category', 'Comment');
@@ -18,8 +23,6 @@
   
     document.body.appendChild(script);
 
-    const giscusContainer = document.createElement('div');
-    giscusContainer.class = 'giscus';
-    document.body.appendChild(giscusContainer);
+    console.log('[Giscus] embed script added');
   })();
   
