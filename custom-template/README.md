@@ -1,16 +1,15 @@
 # HL7® Austria - IG Template 
 
-This repository serves to host the FHIR® IG Template developed by the HL7® Technical Comitee for FHIR® for the Austrian domain.
+This repository serves to host the FHIR® IG Ballot Template developed by the HL7® Technical Comitee for FHIR® for the Austrian domain.
 
 ## Features
-* Custom logo
-* Style changes
+* Custom giscus integration
 
 ## Using the ig template
 
 Refer to the IG template in your implementation guide (ig.ini) with:
 ```
-template = hl7.at.fhir.template#current
+template = hl7.at.fhir.ballot.template#current
 ```
 
 * Provide [packages-list.json](https://wiki.hl7.org/index.php?title=FHIR_IG_PackageList_doco) in input/pagecontent directory
