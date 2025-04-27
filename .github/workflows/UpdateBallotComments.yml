@@ -39,7 +39,7 @@ jobs:
           while [ "$NEXT" != "null" ]; do
             echo "Fetching discussions after cursor: $NEXT"
             if [ "$NEXT" = "null" ]; then
-              gh api graphql -F query='{
+              echo '{
                 repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                   discussions(first: 100) {
                     pageInfo { endCursor hasNextPage }
@@ -53,9 +53,9 @@ jobs:
                     }
                   }
                 }
-              }' > temp/page.json
+              }' | gh api graphql -f query=- > temp/page.json
             else
-              gh api graphql -F query='query($cursor: String!) {
+              echo 'query($cursor: String!) {
                 repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                   discussions(first: 100, after: $cursor) {
                     pageInfo { endCursor hasNextPage }
@@ -69,7 +69,7 @@ jobs:
                     }
                   }
                 }
-              }' -f cursor="$NEXT" > temp/page.json
+              }' | gh api graphql -f query=- -f cursor="$NEXT" > temp/page.json
             fi
 
             node <<EOF
