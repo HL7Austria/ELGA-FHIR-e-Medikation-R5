@@ -80,32 +80,32 @@ jobs:
           mkdir -p comments
 
           python3 <<EOF
-import json, base64, os
-all_discussions = json.load(open('temp/discussions-all.json'))
-comments = []
-for d in all_discussions:
-    if d.get('category', {}).get('name') != 'Comment':
-        continue
-    try:
-        decoded = base64.b64decode(d['title']).decode()
-        parts = decoded.split('|')
-        if len(parts) != 5:
-            continue
-        comments.append({
-            "page": parts[0],
-            "startXPath": parts[1],
-            "startOffset": int(parts[2]),
-            "endXPath": parts[3],
-            "endOffset": int(parts[4]),
-            "url": d['url'],
-            "createdAt": d['createdAt'],
-            "number": d['number']
-        })
-    except Exception as e:
-        continue
-with open('comments/comments.json', 'w') as f:
-    json.dump(comments, f, indent=2)
-EOF
+          import json, base64, os
+          all_discussions = json.load(open('temp/discussions-all.json'))
+          comments = []
+          for d in all_discussions:
+              if d.get('category', {}).get('name') != 'Comment':
+                  continue
+              try:
+                  decoded = base64.b64decode(d['title']).decode()
+                  parts = decoded.split('|')
+                  if len(parts) != 5:
+                      continue
+                  comments.append({
+                      "page": parts[0],
+                      "startXPath": parts[1],
+                      "startOffset": int(parts[2]),
+                      "endXPath": parts[3],
+                      "endOffset": int(parts[4]),
+                      "url": d['url'],
+                      "createdAt": d['createdAt'],
+                      "number": d['number']
+                  })
+              except Exception as e:
+                  continue
+          with open('comments/comments.json', 'w') as f:
+              json.dump(comments, f, indent=2)
+          EOF
 
       - name: Commit and push updated comments.json
         working-directory: site
