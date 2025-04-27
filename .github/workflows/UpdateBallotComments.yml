@@ -1,0 +1,132 @@
+# Workflow to update the ballot comments in comments.json
+name: UpdateBallotComments
+
+on:
+  discussion:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-comments:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitHub Pages site
+        uses: actions/checkout@v4
+        with:
+          repository: HL7Austria/hl7austria.github.io
+          ref: pages
+          path: site
+
+      # - name: Set IG Subfolder name
+      #   id: set_folder
+      #   run: |
+      #     BRANCH_NAME=${{ github.ref_name }}
+      #     echo "Detected branch: $BRANCH_NAME"
+      #     echo "IG_FOLDER=r5-ELGA-e-medikation-$BRANCH_NAME" >> $GITHUB_ENV
+
+      - name: Fetch Discussions and Generate comments.json
+        working-directory: site/r5-ELGA-e-medikation-section-specific-ballot-tool-approach
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          mkdir -p temp
+          NEXT="null"
+          echo '[]' > temp/discussions-all.json
+
+          while [ "$NEXT" != "null" ]; do
+            echo "Fetching discussions after cursor: $NEXT"
+            if [ "$NEXT" = "null" ]; then
+              gh api graphql -F query='{
+                repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
+                  discussions(first: 100) {
+                    pageInfo { endCursor hasNextPage }
+                    nodes {
+                      title
+                      body
+                      url
+                      number
+                      createdAt
+                      category { name }
+                    }
+                  }
+                }
+              }' > temp/page.json
+            else
+              gh api graphql -F query='query($cursor: String!) {
+                repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
+                  discussions(first: 100, after: $cursor) {
+                    pageInfo { endCursor hasNextPage }
+                    nodes {
+                      title
+                      body
+                      url
+                      number
+                      createdAt
+                      category { name }
+                    }
+                  }
+                }
+              }' -f cursor="$NEXT" > temp/page.json
+            fi
+
+            node <<EOF
+            const fs = require('fs');
+            const all = JSON.parse(fs.readFileSync('temp/discussions-all.json'));
+            const page = JSON.parse(fs.readFileSync('temp/page.json')).data.repository.discussions.nodes;
+            fs.writeFileSync('temp/discussions-all.json', JSON.stringify(all.concat(page), null, 2));
+            EOF
+
+            NEXT=$(node -e "console.log(require('./temp/page.json').data.repository.discussions.pageInfo.hasNextPage ? '\"' + require('./temp/page.json').data.repository.discussions.pageInfo.endCursor + '\"' : 'null')")
+          done
+
+          mkdir -p comments
+
+          node <<EOF
+          const fs = require('fs');
+          const discussions = JSON.parse(fs.readFileSync('temp/discussions-all.json'));
+
+          const extractInfo = (body) => {
+            const startMatch = body.match(/Start: \(([^)]+)\) \(offset ([0-9]+)\)/);
+            const endMatch = body.match(/End: \(([^)]+)\) \(offset ([0-9]+)\)/);
+
+            if (!startMatch || !endMatch) return null;
+
+            return {
+              startXPath: startMatch[1],
+              startOffset: parseInt(startMatch[2]),
+              endXPath: endMatch[1],
+              endOffset: parseInt(endMatch[2])
+            };
+          };
+
+          const comments = discussions.map(d => {
+            if (d.category.name !== "Comment") return null;
+            const extracted = extractInfo(d.title);
+            if (!extracted) return null;
+
+            return {
+              page: new URL(d.url).searchParams.get('page') || '/',
+              startXPath: extracted.startXPath,
+              startOffset: extracted.startOffset,
+              endXPath: extracted.endXPath,
+              endOffset: extracted.endOffset,
+              url: d.url,
+              createdAt: d.createdAt,
+              number: d.number
+            };
+          }).filter(Boolean);
+
+          fs.writeFileSync('comments/comments.json', JSON.stringify(comments, null, 2));
+          EOF
+
+      - name: Commit and push updated comments.json
+        working-directory: site
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add r5-ELGA-e-medikation-section-specific-ballot-tool-approach/comments/comments.json
+          git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
+          git push
