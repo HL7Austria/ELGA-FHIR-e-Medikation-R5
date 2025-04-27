@@ -71,62 +71,50 @@ jobs:
               }' -f cursor="$NEXT" > temp/page.json
             fi
 
-            node <<EOF
-          const fs = require('fs');
-          const all = JSON.parse(fs.readFileSync('temp/discussions-all.json'));
-          const page = JSON.parse(fs.readFileSync('temp/page.json')).data.repository.discussions.nodes;
-          fs.writeFileSync('temp/discussions-all.json', JSON.stringify(all.concat(page), null, 2));
-          EOF
+            jq -s '.[0] + .[1]' temp/discussions-all.json temp/page.json > temp/merged.json
+            mv temp/merged.json temp/discussions-all.json
 
-                      NEXT=$(node -e "const page = require('./temp/page.json').data.repository.discussions.pageInfo; console.log(page.hasNextPage ? page.endCursor : 'null')")
-                    done
+            NEXT=$(jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "null" end' temp/page.json)
+          done
 
-                    mkdir -p comments
+          mkdir -p comments
 
-                    node <<EOF
-          const fs = require('fs');
-          const discussions = JSON.parse(fs.readFileSync('temp/discussions-all.json'));
-
-          const extractInfo = (body) => {
-            const startMatch = body.match(/Start: \(([^)]+)\) \(offset ([0-9]+)\)/);
-            const endMatch = body.match(/End: \(([^)]+)\) \(offset ([0-9]+)\)/);
-
-            if (!startMatch || !endMatch) return null;
-
-            return {
-              startXPath: startMatch[1],
-              startOffset: parseInt(startMatch[2]),
-              endXPath: endMatch[1],
-              endOffset: parseInt(endMatch[2])
-            };
-          };
-
-          const comments = discussions.map(d => {
-            if (d.category.name !== "Comment") return null;
-            const extracted = extractInfo(d.title);
-            if (!extracted) return null;
-
-            return {
-              page: new URL(d.url).searchParams.get('page') || '/',
-              startXPath: extracted.startXPath,
-              startOffset: extracted.startOffset,
-              endXPath: extracted.endXPath,
-              endOffset: extracted.endOffset,
-              url: d.url,
-              createdAt: d.createdAt,
-              number: d.number
-            };
-          }).filter(Boolean);
-
-          fs.writeFileSync('comments/comments.json', JSON.stringify(comments, null, 2));
-          EOF
-
+          python3 <<EOF
+import json, base64, os
+all_discussions = json.load(open('temp/discussions-all.json'))
+comments = []
+for d in all_discussions:
+    if d.get('category', {}).get('name') != 'Comment':
+        continue
+    try:
+        decoded = base64.b64decode(d['title']).decode()
+        parts = decoded.split('|')
+        if len(parts) != 5:
+            continue
+        comments.append({
+            "page": parts[0],
+            "startXPath": parts[1],
+            "startOffset": int(parts[2]),
+            "endXPath": parts[3],
+            "endOffset": int(parts[4]),
+            "url": d['url'],
+            "createdAt": d['createdAt'],
+            "number": d['number']
+        })
+    except Exception as e:
+        continue
+with open('comments/comments.json', 'w') as f:
+    json.dump(comments, f, indent=2)
+EOF
 
       - name: Commit and push updated comments.json
         working-directory: site
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add comments/comments.json
-          git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
-          git push
+          if [ -f comments/comments.json ]; then
+            git add comments/comments.json
+            git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
+            git push
+          else
+            echo "No comments.json generated. Skipping commit."
