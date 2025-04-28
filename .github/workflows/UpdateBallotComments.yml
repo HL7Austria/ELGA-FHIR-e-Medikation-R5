@@ -76,6 +76,9 @@ jobs:
               ' -f cursor="$NEXT" > temp/page.json
             fi
 
+            echo "Fetched page.json contents:"
+            cat temp/page.json || echo "No page.json found"
+
             jq '[.[0][] , .[1].data.repository.discussions.nodes[]]' temp/discussions-all.json temp/page.json > temp/merged.json
             mv temp/merged.json temp/discussions-all.json
 
