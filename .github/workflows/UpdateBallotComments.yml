@@ -78,8 +78,41 @@ jobs:
           done
 
       - name: Generate comments.json
+        working-directory: site/${{ env.IG_FOLDER }}
+        shell: python
         run: |
-          python3 .github/scripts/generate-comments.py
+          import os, json, base64
+        
+          os.makedirs('comments', exist_ok=True)
+        
+          with open('temp/discussions-all.json', 'r') as f:
+            all_discussions = json.load(f)
+        
+          comments = []
+          for d in all_discussions:
+            if d.get('category', {}).get('name') != 'Comment':
+                continue
+            try:
+                decoded = base64.b64decode(d['title']).decode('utf-8')
+                parts = decoded.split('|')
+                if len(parts) != 5:
+                  continue
+                comments.append({
+                    'page': '/',
+                    'startXPath': parts[1],
+                    'startOffset': int(parts[2]),
+                    'endXPath': parts[3],
+                    'endOffset': int(parts[4]),
+                    'url': d['url'],
+                    'createdAt': d['createdAt'],
+                    'number': d['number']
+                 })
+            except Exception:
+              continue
+        
+          with open('comments/comments.json', 'w') as f:
+            json.dump(comments, f, indent=2)
+        
         
 
       - name: Commit and push updated comments.json
