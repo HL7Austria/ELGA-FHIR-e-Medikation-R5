@@ -93,3 +93,4 @@ jobs:
             git push
           else
             echo "No comments.json generated. Skipping commit."
+          fi
