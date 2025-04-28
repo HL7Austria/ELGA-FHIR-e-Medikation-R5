@@ -78,9 +78,9 @@ jobs:
           done
 
       - name: Generate comments.json
-        working-directory: site/${{ env.IG_FOLDER }}
         run: |
-          python3 ../scripts/generate-comments.py
+          python3 .github/scripts/generate-comments.py
+        
 
       - name: Commit and push updated comments.json
         working-directory: site
