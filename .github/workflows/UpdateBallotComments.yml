@@ -76,6 +76,11 @@ jobs:
 
             NEXT=$(jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "null" end' temp/page.json)
           done
+          
+      - name: Show fetched discussions
+        working-directory: site/${{ env.IG_FOLDER }}
+        run: |
+            cat temp/discussions-all.json || echo "No discussions-all.json found"
 
       - name: Generate comments.json
         working-directory: site/${{ env.IG_FOLDER }}
