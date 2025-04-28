@@ -55,7 +55,7 @@ jobs:
                     }
                   }
                 }
-              ' > temp/page.json
+              '
             else
               gh api graphql --field query='
                 query ($cursor: String!) {
@@ -73,16 +73,11 @@ jobs:
                     }
                   }
                 }
-              ' -f cursor="$NEXT" > temp/page.json
+              ' -f cursor="$NEXT"
             fi
+            echo "Fetched page.json contents (above)"
 
-            echo "Fetched page.json contents:"
-            cat temp/page.json || echo "No page.json found"
-
-            jq '[.[0][] , .[1].data.repository.discussions.nodes[]]' temp/discussions-all.json temp/page.json > temp/merged.json
-            mv temp/merged.json temp/discussions-all.json
-
-            NEXT=$(jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "null" end' temp/page.json)
+            NEXT="null"
           done
           
       - name: Show fetched discussions
