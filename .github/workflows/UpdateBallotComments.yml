@@ -39,7 +39,7 @@ jobs:
           while [ "$NEXT" != "null" ]; do
             echo "Fetching discussions after cursor: $NEXT"
             if [ "$NEXT" = "null" ]; then
-              RESPONSE=$(gh api graphql --field query='
+              RESPONSE=$(gh api graphql --repo HL7Austria/ELGA-FHIR-e-Medikation-R5 --field query='
                 query {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                     discussions(first: 100) {
@@ -57,7 +57,7 @@ jobs:
                 }
               ')
             else
-              RESPONSE=$(gh api graphql --field query='
+              RESPONSE=$(gh api graphql --repo HL7Austria/ELGA-FHIR-e-Medikation-R5 --field query='
                 query ($cursor: String!) {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                     discussions(first: 100, after: $cursor) {
