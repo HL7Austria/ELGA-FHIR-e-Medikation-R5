@@ -39,7 +39,7 @@ jobs:
           while [ "$NEXT" != "null" ]; do
             echo "Fetching discussions after cursor: $NEXT"
             if [ "$NEXT" = "null" ]; then
-              gh api graphql --field query='
+              RESPONSE=$(gh api graphql --field query='
                 query {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                     discussions(first: 100) {
@@ -55,9 +55,9 @@ jobs:
                     }
                   }
                 }
-              '
+              ')
             else
-              gh api graphql --field query='
+              RESPONSE=$(gh api graphql --field query='
                 query ($cursor: String!) {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                     discussions(first: 100, after: $cursor) {
@@ -73,12 +73,23 @@ jobs:
                     }
                   }
                 }
-              ' -f cursor="$NEXT"
+              ' -f cursor="$NEXT")
             fi
-            echo "Fetched page.json contents (above)"
-
-            NEXT="null"
+        
+            echo "Fetched response:"
+            echo "$RESPONSE"
+      
+            echo "$RESPONSE" > temp/page.json
+      
+            jq '[ .[0][] , .[1].data.repository.discussions.nodes[]? ]' temp/discussions-all.json temp/page.json > temp/merged.json
+            mv temp/merged.json temp/discussions-all.json
+      
+            NEXT=$(echo "$RESPONSE" | jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "null" end')
           done
+        
+          echo "Final fetched discussions:"
+          cat temp/discussions-all.json
+        
           
       - name: Show fetched discussions
         working-directory: site/${{ env.IG_FOLDER }}
