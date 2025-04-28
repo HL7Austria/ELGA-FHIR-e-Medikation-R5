@@ -27,7 +27,7 @@ jobs:
           echo "Detected branch: $BRANCH_NAME"
           echo "IG_FOLDER=r5-ELGA-e-medikation-$BRANCH_NAME" >> $GITHUB_ENV
 
-      - name: Fetch Discussions and Generate comments.json
+      - name: Fetch Discussions
         working-directory: site/${{ env.IG_FOLDER }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -39,40 +39,44 @@ jobs:
           while [ "$NEXT" != "null" ]; do
             echo "Fetching discussions after cursor: $NEXT"
             if [ "$NEXT" = "null" ]; then
-              gh api graphql -F query='{
-                repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                  discussions(first: 100) {
-                    pageInfo { endCursor hasNextPage }
-                    nodes {
-                      title
-                      body
-                      url
-                      number
-                      createdAt
-                      category { name }
+              gh api graphql --field query='
+                query {
+                  repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
+                    discussions(first: 100) {
+                      pageInfo { endCursor hasNextPage }
+                      nodes {
+                        title
+                        body
+                        url
+                        number
+                        createdAt
+                        category { name }
+                      }
                     }
                   }
                 }
-              }' > temp/page.json
+              ' > temp/page.json
             else
-              gh api graphql -F query='query($cursor: String!) {
-                repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                  discussions(first: 100, after: $cursor) {
-                    pageInfo { endCursor hasNextPage }
-                    nodes {
-                      title
-                      body
-                      url
-                      number
-                      createdAt
-                      category { name }
+              gh api graphql --field query='
+                query ($cursor: String!) {
+                  repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
+                    discussions(first: 100, after: $cursor) {
+                      pageInfo { endCursor hasNextPage }
+                      nodes {
+                        title
+                        body
+                        url
+                        number
+                        createdAt
+                        category { name }
+                      }
                     }
                   }
                 }
-              }' -f cursor="$NEXT" > temp/page.json
+              ' -f cursor="$NEXT" > temp/page.json
             fi
 
-            jq -s '.[0] + .[1]' temp/discussions-all.json temp/page.json > temp/merged.json
+            jq '[.[0][] , .[1].data.repository.discussions.nodes[]]' temp/discussions-all.json temp/page.json > temp/merged.json
             mv temp/merged.json temp/discussions-all.json
 
             NEXT=$(jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "null" end' temp/page.json)
