@@ -40,7 +40,7 @@ jobs:
             echo "Fetching discussions after cursor: $NEXT"
             if [ "$NEXT" == "first" ]; then
               echo "Fetching first"
-              RESPONSE=$(gh api graphql --repo HL7Austria/ELGA-FHIR-e-Medikation-R5 --field query='
+              RESPONSE=$(gh api graphql --field query='
                 query {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                     discussions(first: 10) {
@@ -59,7 +59,7 @@ jobs:
               ')
             else
               echo "Fetching continuous"
-              RESPONSE=$(gh api graphql --repo HL7Austria/ELGA-FHIR-e-Medikation-R5 --field query='
+              RESPONSE=$(gh api graphql --field query='
                 query ($cursor: String!) {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
                     discussions(first: 10, after: $cursor) {
