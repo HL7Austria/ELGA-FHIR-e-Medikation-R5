@@ -33,16 +33,17 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           mkdir -p temp
-          NEXT="null"
+          NEXT="first"
           echo '[]' > temp/discussions-all.json
 
-          while [ "$NEXT" != "null" ]; do
+          while [ ! -z "$NEXT" ]; do
             echo "Fetching discussions after cursor: $NEXT"
-            if [ "$NEXT" = "null" ]; then
+            if [ "$NEXT" == "first" ]; then
+              echo "Fetching first"
               RESPONSE=$(gh api graphql --repo HL7Austria/ELGA-FHIR-e-Medikation-R5 --field query='
                 query {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                    discussions(first: 100) {
+                    discussions(first: 10) {
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
@@ -57,10 +58,11 @@ jobs:
                 }
               ')
             else
+              echo "Fetching continuous"
               RESPONSE=$(gh api graphql --repo HL7Austria/ELGA-FHIR-e-Medikation-R5 --field query='
                 query ($cursor: String!) {
                   repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                    discussions(first: 100, after: $cursor) {
+                    discussions(first: 10, after: $cursor) {
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
@@ -75,22 +77,22 @@ jobs:
                 }
               ' -f cursor="$NEXT")
             fi
-        
+
             echo "Fetched response:"
             echo "$RESPONSE"
-      
+
             echo "$RESPONSE" > temp/page.json
-      
+
             jq '[ .[0][] , .[1].data.repository.discussions.nodes[]? ]' temp/discussions-all.json temp/page.json > temp/merged.json
             mv temp/merged.json temp/discussions-all.json
-      
-            NEXT=$(echo "$RESPONSE" | jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "null" end')
+
+            NEXT=$(echo "$RESPONSE" | jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "" end')
           done
-        
+
           echo "Final fetched discussions:"
           cat temp/discussions-all.json
-        
-          
+
+
       - name: Show fetched discussions
         working-directory: site/${{ env.IG_FOLDER }}
         run: |
@@ -101,12 +103,12 @@ jobs:
         shell: python
         run: |
           import os, json, base64
-        
+
           os.makedirs('comments', exist_ok=True)
-        
+
           with open('temp/discussions-all.json', 'r') as f:
             all_discussions = json.load(f)
-        
+
           comments = []
           for d in all_discussions:
             if d.get('category', {}).get('name') != 'Comment':
@@ -128,11 +130,11 @@ jobs:
                  })
             except Exception:
               continue
-        
+
           with open('comments/comments.json', 'w') as f:
             json.dump(comments, f, indent=2)
-        
-        
+
+
 
       - name: Commit and push updated comments.json
         working-directory: site
