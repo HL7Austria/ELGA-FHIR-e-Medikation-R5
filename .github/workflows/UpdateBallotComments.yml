@@ -83,7 +83,7 @@ jobs:
 
             echo "$RESPONSE" > temp/page.json
 
-            jq '[ .[0][] , .[1].data.repository.discussions.nodes[]? ]' temp/discussions-all.json temp/page.json > temp/merged.json
+            jq -s '[ .[0][], .[1].data.repository.discussions.nodes[]? ]' temp/discussions-all.json temp/page.json > temp/merged.json
             mv temp/merged.json temp/discussions-all.json
 
             NEXT=$(echo "$RESPONSE" | jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "" end')
