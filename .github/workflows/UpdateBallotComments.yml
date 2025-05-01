@@ -13,12 +13,11 @@ jobs:
   update-comments:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout GitHub Pages site
+      - name: Checkout Ballot Comment Repo
         uses: actions/checkout@v4
         with:
-          repository: HL7Austria/hl7austria.github.io
-          ref: pages
-          path: site
+          repository: HL7Austria/ballot-comments
+          path: .
 
       - name: Set IG Subfolder name
         id: set_folder
@@ -28,13 +27,14 @@ jobs:
           echo "IG_FOLDER=r5-ELGA-e-medikation-$BRANCH_NAME" >> $GITHUB_ENV
 
       - name: Fetch Discussions
-        working-directory: site/${{ env.IG_FOLDER }}
+        working-directory: ${{ env.IG_FOLDER }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p temp
+          FOLDER="discussions-${{ github.ref_name }}"
+          mkdir -p "$FOLDER"
+          echo '[]' > "$FOLDER/discussions-all.json"
           NEXT="first"
-          echo '[]' > temp/discussions-all.json
 
           while [ ! -z "$NEXT" ]; do
             echo "Fetching discussions after cursor: $NEXT"
@@ -47,7 +47,6 @@ jobs:
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
-                        body
                         url
                         number
                         createdAt
@@ -66,7 +65,6 @@ jobs:
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
-                        body
                         url
                         number
                         createdAt
@@ -78,35 +76,29 @@ jobs:
               ' -f cursor="$NEXT")
             fi
 
-            echo "Fetched response:"
-            echo "$RESPONSE"
+            echo "$RESPONSE" | jq '.data.repository.discussions.nodes' > $FOLDER/page.json
 
-            echo "$RESPONSE" > temp/page.json
-
-            jq -s '[ .[0][], .[1].data.repository.discussions.nodes[]? ]' temp/discussions-all.json temp/page.json > temp/merged.json
-            mv temp/merged.json temp/discussions-all.json
-
+            # Merge with existing
+            jq -s '.[0] + .[1]' $FOLDER/discussions-all.json $FOLDER/page.json > $FOLDER/merged.json
+            mv $FOLDER/merged.json $FOLDER/discussions-all.json
             NEXT=$(echo "$RESPONSE" | jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "" end')
           done
 
-          echo "Final fetched discussions:"
-          cat temp/discussions-all.json
-
 
       - name: Show fetched discussions
-        working-directory: site/${{ env.IG_FOLDER }}
+        working-directory: ${{ env.IG_FOLDER }}
         run: |
-            cat temp/discussions-all.json || echo "No discussions-all.json found"
+          cat "discussions-${{ github.ref_name }}/discussions-all.json" || echo "No discussions found"
+
 
       - name: Generate comments.json
-        working-directory: site/${{ env.IG_FOLDER }}
+        working-directory: ${{ env.IG_FOLDER }}
         shell: python
         run: |
           import os, json, base64
 
-          os.makedirs('comments', exist_ok=True)
-
-          with open('temp/discussions-all.json', 'r') as f:
+          folder = f'discussions-${os.environ["GITHUB_REF_NAME"]}'
+          with open(f'{folder}/discussions-all.json', 'r') as f:
             all_discussions = json.load(f)
 
           comments = []
@@ -119,7 +111,7 @@ jobs:
                 if len(parts) != 5:
                   continue
                 comments.append({
-                    'page': '/',
+                    'page': parts[0],
                     'startXPath': parts[1],
                     'startOffset': int(parts[2]),
                     'endXPath': parts[3],
@@ -131,18 +123,18 @@ jobs:
             except Exception:
               continue
 
-          with open('comments/comments.json', 'w') as f:
+          with open(f'{folder}/comments.json', 'w') as f:
             json.dump(comments, f, indent=2)
 
 
 
       - name: Commit and push updated comments.json
-        working-directory: site
+        working-directory: ${{ env.IG_FOLDER }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          if [ -f comments/comments.json ]; then
-            git add comments/comments.json
+          if [ -f discussions-${{ github.ref_name }}/comments.json ]; then
+            git add  discussions-${{ github.ref_name }}/comments.json
             git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
             git push
           else
