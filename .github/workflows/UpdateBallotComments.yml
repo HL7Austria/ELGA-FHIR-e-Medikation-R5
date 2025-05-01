@@ -87,7 +87,7 @@ jobs:
         run: |
           import os, json, base64
 
-          folder = f'discussions-${os.environ["GITHUB_REF_NAME"]}'
+          folder = f'discussions-{os.environ["GITHUB_REF_NAME"]}'
           with open(f'{folder}/discussions-all.json', 'r') as f:
             all_discussions = json.load(f)
 
