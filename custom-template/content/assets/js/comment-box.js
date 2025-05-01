@@ -108,7 +108,7 @@
   
     function generateCommentId(comment) {
       const { page, startXPath, startOffset, endXPath, endOffset } = comment;
-      const payload = `${location.origin}${page}|${startXPath}|${startOffset}|${endXPath}|${endOffset}`;
+      const payload = `${page}|${startXPath}|${startOffset}|${endXPath}|${endOffset}`;
       return btoa(payload);
     }
   
@@ -163,7 +163,8 @@
     }
   
     function highlightComment(comment) {
-      if (comment.page !== location.pathname) return;
+      const url = new URL(comment.page);
+      if (url.pathname !== location.pathname) return;
       const span = highlightSingleNode(
         comment.startXPath,
         comment.startOffset,
@@ -250,7 +251,7 @@
       if (!selection) return;
   
       const comment = {
-        page: location.pathname,
+        page: location.href,
         selection,
         startXPath: getXPathForNode(range.startContainer),
         startOffset: range.startOffset,
