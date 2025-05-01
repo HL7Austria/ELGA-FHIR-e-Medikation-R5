@@ -2,7 +2,7 @@
 
 (function () {
     let currentSelection = null;
-    const COMMENTS_JSON_URL = 'comments/comments.json';
+    const COMMENTS_JSON_URL = 'https://raw.githubusercontent.com/HL7Austria/ballot-comments/main/discussions-section-specific-ballot-tool-approach/comments.json';
     const GITHUB_REPO = 'HL7Austria/ELGA-FHIR-e-Medikation-R5';
     const GITHUB_REPO_ID = 'R_kgDOLhyFQQ';
     const GITHUB_CATEGORY = 'Comment';
