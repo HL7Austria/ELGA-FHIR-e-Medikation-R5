@@ -88,6 +88,18 @@ jobs:
         shell: python
         run: |
           import os, json, base64
+          def decompress_xpath(compressed):
+              parts = compressed.split('/')
+              expanded = []
+
+              for part in parts:
+                  if '*' in part:
+                      tag, count = part.split('*')
+                      expanded.extend([tag] * int(count))
+                  elif part:
+                      expanded.append(part)
+
+              return '/' + '/'.join(expanded)
 
           folder = f'discussions-{os.environ["GITHUB_REF_NAME"]}'
           with open(f'{folder}/discussions-all.json', 'r') as f:
@@ -98,27 +110,30 @@ jobs:
             if d.get('category', {}).get('name') != 'Comment':
                 continue
             try:
-                decoded = base64.b64decode(d['title']).decode('utf-8')
-                parts = decoded.split('|')
-                if len(parts) != 5:
-                  continue
+                #decoded = base64.b64decode(d['title']).decode('utf-8')
+                #parts = decoded.split('|')
+                parts = d['title'].split('|')
+                if len(parts) != 4:
+                    continue
                 comments.append({
+                    'commentId': d['title'],
                     'page': parts[0],
-                    'startXPath': parts[1],
+                    'startXPath': decompress_xpath(parts[1]),
                     'startOffset': int(parts[2]),
-                    'endXPath': parts[3],
-                    'endOffset': int(parts[4]),
+                    'endOffset': int(parts[3]),
                     'url': d['url'],
                     'createdAt': d['createdAt'],
                     'number': d['number']
-                 })
+                    })
             except Exception:
               continue
 
           with open(f'{folder}/comments.json', 'w') as f:
             json.dump(comments, f, indent=2)
 
-
+      - name: Show final comments
+        run: |
+          cat "discussions-${{ github.ref_name }}/comments.json" || echo "No discussions found"
 
       - name: Commit and push updated comments.json
         run: |
