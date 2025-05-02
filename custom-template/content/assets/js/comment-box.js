@@ -47,31 +47,38 @@
       highlightComment(newComment);
     }
   
-    function getCleanNode(node) {
-      while (node && node.nodeType === 1 && INLINE_TAGS.includes(node.nodeName.toLowerCase())) {
-        node = node.parentNode;
-      }
-      return node;
-    }
   
     function getXPathForNode(node) {
-      node = getCleanNode(node);
-      if (node.nodeType === Node.TEXT_NODE) {
-        return getXPathForNode(node.parentNode) + '/text()';
-      }
-      const parts = [];
-      while (node && node.nodeType === 1) {
-        let count = 0;
-        let sibling = node.previousSibling;
-        while (sibling) {
-          if (sibling.nodeType === 1 && sibling.nodeName === node.nodeName) count++;
-          sibling = sibling.previousSibling;
+        if (!node) return '';
+      
+        // If it's a text node, recurse into its parent and append /text()
+        if (node.nodeType === Node.TEXT_NODE) {
+          return getXPathForNode(node.parentNode) + '/text()';
         }
-        parts.unshift(node.nodeName.toLowerCase() + (count ? `[${count + 1}]` : ''));
-        node = node.parentNode;
+      
+        // Avoid skipping important layout elements like td/th
+        const tag = node.nodeName.toLowerCase();
+        if (INLINE_TAGS.includes(tag) && !['td', 'th'].includes(node.parentNode?.nodeName?.toLowerCase())) {
+          return getXPathForNode(node.parentNode);
+        }
+      
+        const parts = [];
+        while (node && node.nodeType === 1) {
+          let count = 0;
+          let sibling = node.previousSibling;
+          while (sibling) {
+            if (sibling.nodeType === 1 && sibling.nodeName === node.nodeName) count++;
+            sibling = sibling.previousSibling;
+          }
+          parts.unshift(node.nodeName.toLowerCase() + (count ? `[${count + 1}]` : ''));
+          node = node.parentNode;
+        }
+      
+        const xpath = '/' + parts.join('/');
+      
+        return xpath;
       }
-      return '/' + parts.join('/');
-    }
+      
   
     function getNodeByXPath(xpath) {
       try {
@@ -83,7 +90,7 @@
       }
     }
   
-    function highlightSingleNode(startXPath, startOffset, endXPath, endOffset, color = '#fffd8c') {
+    function highlightSingleNode(startXPath, startOffset, endXPath, endOffset, color = '#fffd8c', commentId = '') {
       const startNode = getNodeByXPath(startXPath);
       const endNode = getNodeByXPath(endXPath);
       if (!startNode || !endNode) return;
@@ -100,6 +107,7 @@
       span.style.backgroundColor = color;
       span.style.position = 'relative';
       span.setAttribute('data-comment', 'true');
+      span.setAttribute('data-comment-id', commentId);
   
       range.surroundContents(span);
   
@@ -113,54 +121,59 @@
     }
   
     function showGiscusForComment(commentId) {
-      const containerId = 'giscus-container';
-      let container = document.getElementById(containerId);
-  
-      if (!container) {
-        container = document.createElement('div');
-        container.id = containerId;
-        container.style.position = 'fixed';
-        container.style.bottom = '1rem';
-        container.style.right = '1rem';
-        container.style.width = '400px';
-        container.style.height = '400px';
-        container.style.background = 'white';
-        container.style.border = '1px solid #ccc';
-        container.style.zIndex = '10000';
-        container.style.overflow = 'auto';
-        container.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-        document.body.appendChild(container);
-      }
-  
-      container.style.display = 'block';
-      container.innerHTML = '';
-  
-      const closeButton = document.createElement('button');
-      closeButton.textContent = '✖';
-      closeButton.style.position = 'absolute';
-      closeButton.style.top = '5px';
-      closeButton.style.right = '5px';
-      closeButton.style.zIndex = '10001';
-      closeButton.onclick = () => {
-        container.style.display = 'none';
+        const containerId = 'giscus-container';
+        let container = document.getElementById(containerId);
+      
+        if (!container) {
+          container = document.createElement('div');
+          container.id = containerId;
+          container.style.position = 'fixed';
+          container.style.bottom = '1rem';
+          container.style.right = '1rem';
+          container.style.width = '400px';
+          container.style.height = '400px';
+          container.style.background = 'white';
+          container.style.border = '1px solid #ccc';
+          container.style.zIndex = '10000';
+          container.style.overflow = 'auto';
+          container.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+          document.body.appendChild(container);
+        }
+      
+        // Clear old content and force fresh load
+        container.style.display = 'block';
         container.innerHTML = '';
-      };
-  
-      const giscusScript = document.createElement('script');
-      giscusScript.src = 'https://giscus.app/client.js';
-      giscusScript.setAttribute('data-repo', GITHUB_REPO);
-      giscusScript.setAttribute('data-repo-id', GITHUB_REPO_ID);
-      giscusScript.setAttribute('data-category', GITHUB_CATEGORY);
-      giscusScript.setAttribute('data-category-id', GITHUB_CATEGORY_ID);
-      giscusScript.setAttribute('data-mapping', 'specific');
-      giscusScript.setAttribute('data-term', commentId);
-      giscusScript.setAttribute('data-theme', 'light');
-      giscusScript.crossOrigin = 'anonymous';
-      giscusScript.async = true;
-  
-      container.appendChild(closeButton);
-      container.appendChild(giscusScript);
-    }
+      
+        const closeButton = document.createElement('button');
+        closeButton.textContent = '✖';
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '5px';
+        closeButton.style.right = '5px';
+        closeButton.style.zIndex = '10001';
+        closeButton.onclick = () => {
+          container.style.display = 'none';
+          container.innerHTML = '';
+        };
+      
+        const giscusScript = document.createElement('script');
+        giscusScript.src = 'https://giscus.app/client.js';
+        giscusScript.setAttribute('data-repo', GITHUB_REPO);
+        giscusScript.setAttribute('data-repo-id', GITHUB_REPO_ID);
+        giscusScript.setAttribute('data-category', GITHUB_CATEGORY);
+        giscusScript.setAttribute('data-category-id', GITHUB_CATEGORY_ID);
+        giscusScript.setAttribute('data-mapping', 'specific');
+        giscusScript.setAttribute('data-term', commentId);
+        giscusScript.setAttribute('data-theme', 'light');
+        giscusScript.crossOrigin = 'anonymous';
+        giscusScript.async = true;
+      
+        // Just before appending
+        console.log('💬 Injecting Giscus with term:', commentId);
+      
+        container.appendChild(closeButton);
+        container.appendChild(giscusScript);
+      }
+      
   
     function highlightComment(comment) {
       const url = new URL(comment.page);
@@ -169,12 +182,20 @@
         comment.startXPath,
         comment.startOffset,
         comment.endXPath,
-        comment.endOffset
+        comment.endOffset,
+        '#fffd8c',
+        comment.commentId
       );
       if (span) {
-        const commentId = generateCommentId(comment);
         span.style.cursor = 'pointer';
-        span.onclick = () => showGiscusForComment(commentId);
+        span.onclick = () => {
+          const cid = span.getAttribute('data-comment-id');
+          if (cid) {
+            showGiscusForComment(cid);
+          } else {
+            console.warn('⚠️ No comment ID found on span');
+          }
+        };
       }
     }
   
@@ -242,8 +263,7 @@
             showToast('✅ Template copied!');
             patchCommentsLocally(comment);
             box.remove();
-            const commentId = generateCommentId(comment);
-            showGiscusForComment(commentId);
+            showGiscusForComment(comment.commentId);
           });
         };
       
@@ -271,10 +291,12 @@
       }
       
   
-    async function initializeHighlights() {
-      await loadComments();
-      loadedComments.forEach(highlightComment);
-    }
+      async function initializeHighlights() {
+        await loadComments();
+        loadedComments.forEach(comment => {
+          highlightComment(comment);
+        });
+      }
   
     window.addEventListener('load', async () => {
       await initializeHighlights();
@@ -305,7 +327,7 @@
         createdAt: new Date().toISOString(),
         number: 0
       };
-  
+      comment.commentId = generateCommentId(comment);
       createTemplateBox(comment);
   
       window.getSelection().removeAllRanges();
