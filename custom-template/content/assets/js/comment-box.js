@@ -46,38 +46,67 @@
       loadedComments.push(newComment);
       highlightComment(newComment);
     }
-  
+    
+    function compressXPath(xpath) {
+      const parts = xpath.split('/');
+      const compressed = [];
+      let count = 1;
+    
+      for (let i = 1; i < parts.length; i++) {
+        if (parts[i] === parts[i - 1]) {
+          count++;
+        } else {
+          if (count > 1) {
+            compressed.push(`${parts[i - 1]}*${count}`);
+          } else {
+            compressed.push(parts[i - 1]);
+          }
+          count = 1;
+        }
+      }
+    
+      // Handle the last element
+      if (count > 1) {
+        compressed.push(`${parts[parts.length - 1]}*${count}`);
+      } else {
+        compressed.push(parts[parts.length - 1]);
+      }
+    
+      return compressed.join('/');
+    }
+    
   
     function getXPathForNode(node) {
-        if (!node) return '';
-      
-        // If it's a text node, recurse into its parent and append /text()
-        if (node.nodeType === Node.TEXT_NODE) {
-          return getXPathForNode(node.parentNode) + '/text()';
-        }
-      
-        // Avoid skipping important layout elements like td/th
-        const tag = node.nodeName.toLowerCase();
-        if (INLINE_TAGS.includes(tag) && !['td', 'th'].includes(node.parentNode?.nodeName?.toLowerCase())) {
-          return getXPathForNode(node.parentNode);
-        }
-      
-        const parts = [];
-        while (node && node.nodeType === 1) {
-          let count = 0;
-          let sibling = node.previousSibling;
-          while (sibling) {
-            if (sibling.nodeType === 1 && sibling.nodeName === node.nodeName) count++;
-            sibling = sibling.previousSibling;
-          }
-          parts.unshift(node.nodeName.toLowerCase() + (count ? `[${count + 1}]` : ''));
-          node = node.parentNode;
-        }
-      
-        const xpath = '/' + parts.join('/');
-      
-        return xpath;
+      if (!node) return '';
+    
+      if (node.nodeType === Node.TEXT_NODE) {
+        return getXPathForNode(node.parentNode) + '/text()';
       }
+    
+      const parts = [];
+      while (node && node.nodeType === 1) {
+        let index = 1;
+        let sibling = node.previousSibling;
+    
+        while (sibling) {
+          if (
+            sibling.nodeType === Node.ELEMENT_NODE &&
+            sibling.nodeName === node.nodeName
+          ) {
+            index++;
+          }
+          sibling = sibling.previousSibling;
+        }
+    
+        const tagName = node.nodeName.toLowerCase();
+        const part = `${tagName}[${index}]`;
+        parts.unshift(part);
+        node = node.parentNode;
+      }
+    
+      return '/' + parts.join('/');
+    }
+    
       
   
     function getNodeByXPath(xpath) {
@@ -90,14 +119,11 @@
       }
     }
   
-    function highlightSingleNode(startXPath, startOffset, endXPath, endOffset, color = '#fffd8c', commentId = '') {
+    function highlightSingleNode(startXPath, startOffset, endOffset, color = '#fffd8c', commentId = '') {
       const startNode = getNodeByXPath(startXPath);
-      const endNode = getNodeByXPath(endXPath);
-      if (!startNode || !endNode) return;
-      if (startNode !== endNode) {
-        console.warn('⚠️ Selection across multiple nodes is not supported.');
-        return;
-      }
+      if (!startNode) return;
+      const endNode = startNode;
+
   
       const range = document.createRange();
       range.setStart(startNode, Math.min(startOffset, startNode.length));
@@ -115,10 +141,12 @@
     }
   
     function generateCommentId(comment) {
-      const { page, startXPath, startOffset, endXPath, endOffset } = comment;
-      const payload = `${page}|${startXPath}|${startOffset}|${endXPath}|${endOffset}`;
-      return btoa(payload);
+      const { page, startXPath, startOffset, endOffset } = comment;
+      const compressedStart = compressXPath(startXPath);
+      const payload = `${page}|${compressedStart}|${startOffset}|${endOffset}`;
+      return payload;
     }
+    
   
     function showGiscusForComment(commentId) {
         const containerId = 'giscus-container';
@@ -176,12 +204,10 @@
       
   
     function highlightComment(comment) {
-      const url = new URL(comment.page);
-      if (url.pathname !== location.pathname) return;
+      if (comment.page !== location.pathname) return;
       const span = highlightSingleNode(
         comment.startXPath,
         comment.startOffset,
-        comment.endXPath,
         comment.endOffset,
         '#fffd8c',
         comment.commentId
@@ -317,11 +343,10 @@
       if (!selection) return;
   
       const comment = {
-        page: location.href,
+        page: location.pathname,
         selection,
         startXPath: getXPathForNode(range.startContainer),
         startOffset: range.startOffset,
-        endXPath: getXPathForNode(range.endContainer),
         endOffset: range.endOffset,
         url: '',
         createdAt: new Date().toISOString(),
