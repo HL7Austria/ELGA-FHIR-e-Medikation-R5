@@ -179,53 +179,97 @@
     }
   
     function createTemplateBox(comment) {
-      const box = document.createElement('div');
-      box.id = 'templateBox';
-      box.style.position = 'fixed';
-      box.style.bottom = '1rem';
-      box.style.right = '1rem';
-      box.style.background = '#fff';
-      box.style.border = '1px solid #ccc';
-      box.style.padding = '1rem';
-      box.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
-      box.style.zIndex = '9999';
-      box.style.maxWidth = '400px';
-      box.style.display = 'block';
-  
-      const template = `### Passage in question\n> ${comment.selection}\n\n### Describe your issue\n[please insert your issue here]\n\n### Describe your proposed solution\n[please insert your solution here]\n\n### Rating\n[choose one: approval & comment / approval proposal / approval & typo / approval question / comment only / heavy disapproval / light disapproval]`;
-  
-      const textarea = document.createElement('textarea');
-      textarea.value = template;
-      textarea.rows = 10;
-      textarea.style.width = '100%';
-  
-      const copyBtn = document.createElement('button');
-      copyBtn.textContent = '📋 Copy and Comment';
-      copyBtn.onclick = () => {
-        navigator.clipboard.writeText(template).then(() => {
-          showToast('✅ Template copied!');
-          box.remove();
-          const commentId = generateCommentId(comment);
-          showGiscusForComment(commentId);
+        const box = document.createElement('div');
+        box.id = 'templateBox';
+        box.style.position = 'fixed';
+        box.style.bottom = '1rem';
+        box.style.right = '1rem';
+        box.style.background = '#fff';
+        box.style.border = '1px solid #ccc';
+        box.style.padding = '1rem';
+        box.style.boxShadow = '0 2px 8px rgba(0,0,0,0.2)';
+        box.style.zIndex = '9999';
+        box.style.maxWidth = '400px';
+        box.style.display = 'block';
+      
+        const passageHeader = document.createElement('label');
+        passageHeader.textContent = '📖 Passage in question';
+        const passage = document.createElement('blockquote');
+        passage.textContent = comment.selection;
+        passage.style.whiteSpace = 'pre-wrap';
+      
+        const issueLabel = document.createElement('label');
+        issueLabel.textContent = '🛠️ Describe your issue';
+        const issueInput = document.createElement('textarea');
+        issueInput.rows = 3;
+        issueInput.style.width = '100%';
+      
+        const solutionLabel = document.createElement('label');
+        solutionLabel.textContent = '💡 Proposed solution';
+        const solutionInput = document.createElement('textarea');
+        solutionInput.rows = 3;
+        solutionInput.style.width = '100%';
+      
+        const ratingLabel = document.createElement('label');
+        ratingLabel.textContent = '⭐ Rating';
+        const ratingSelect = document.createElement('select');
+        ratingSelect.style.width = '100%';
+        [
+          'approval & comment',
+          'approval proposal',
+          'approval & typo',
+          'approval question',
+          'comment only',
+          'light disapproval',
+          'heavy disapproval'
+        ].forEach(value => {
+          const option = document.createElement('option');
+          option.value = value;
+          option.textContent = value;
+          ratingSelect.appendChild(option);
         });
-      };
-  
-      const cancelBtn = document.createElement('button');
-      cancelBtn.textContent = '✖ Cancel';
-      cancelBtn.style.marginLeft = '0.5rem';
-      cancelBtn.onclick = () => {
-        box.remove();
-        window.getSelection().removeAllRanges();
-      };
-  
-      box.appendChild(textarea);
-      box.appendChild(document.createElement('br'));
-      box.appendChild(document.createElement('br'));
-      box.appendChild(copyBtn);
-      box.appendChild(cancelBtn);
-  
-      document.body.appendChild(box);
-    }
+      
+        const copyBtn = document.createElement('button');
+        copyBtn.textContent = '📋 Copy and Comment';
+        copyBtn.style.marginTop = '0.5rem';
+        copyBtn.onclick = () => {
+          const finalTemplate = `### Passage in question\n> ${comment.selection}\n\n` +
+                                `### Describe your issue\n${issueInput.value}\n\n` +
+                                `### Describe your proposed solution\n${solutionInput.value}\n\n` +
+                                `### Rating\n${ratingSelect.value}`;
+      
+          navigator.clipboard.writeText(finalTemplate).then(() => {
+            showToast('✅ Template copied!');
+            patchCommentsLocally(comment);
+            box.remove();
+            const commentId = generateCommentId(comment);
+            showGiscusForComment(commentId);
+          });
+        };
+      
+        const cancelBtn = document.createElement('button');
+        cancelBtn.textContent = '✖ Cancel';
+        cancelBtn.style.marginLeft = '0.5rem';
+        cancelBtn.onclick = () => {
+          box.remove();
+          window.getSelection().removeAllRanges();
+        };
+      
+        box.appendChild(passageHeader);
+        box.appendChild(passage);
+        box.appendChild(issueLabel);
+        box.appendChild(issueInput);
+        box.appendChild(solutionLabel);
+        box.appendChild(solutionInput);
+        box.appendChild(ratingLabel);
+        box.appendChild(ratingSelect);
+        box.appendChild(document.createElement('br'));
+        box.appendChild(copyBtn);
+        box.appendChild(cancelBtn);
+      
+        document.body.appendChild(box);
+      }
+      
   
     async function initializeHighlights() {
       await loadComments();
@@ -262,7 +306,6 @@
         number: 0
       };
   
-      patchCommentsLocally(comment);
       createTemplateBox(comment);
   
       window.getSelection().removeAllRanges();
