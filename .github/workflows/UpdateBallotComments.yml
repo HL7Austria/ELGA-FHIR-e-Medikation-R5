@@ -1,3 +1,4 @@
+
 # Workflow to update the ballot comments in comments.json
 name: UpdateBallotComments
 
@@ -8,125 +9,149 @@ on:
 
 permissions:
   contents: write
+  discussions: read
 
 jobs:
   update-comments:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout GitHub Pages site
+      - name: Checkout Ballot Comment Repo
         uses: actions/checkout@v4
         with:
-          repository: HL7Austria/hl7austria.github.io
-          ref: pages
-          path: site
+          repository: HL7Austria/ballot-comments
+          path: .
+          token: ${{ secrets.ROBO_OLIVER }}
 
-      # - name: Set IG Subfolder name
-      #   id: set_folder
-      #   run: |
-      #     BRANCH_NAME=${{ github.ref_name }}
-      #     echo "Detected branch: $BRANCH_NAME"
-      #     echo "IG_FOLDER=r5-ELGA-e-medikation-$BRANCH_NAME" >> $GITHUB_ENV
-
-      - name: Fetch Discussions and Generate comments.json
-        working-directory: site/r5-ELGA-e-medikation-section-specific-ballot-tool-approach
+      - name: Fetch Discussions
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          mkdir -p temp
-          NEXT="null"
-          echo '[]' > temp/discussions-all.json
+          FOLDER="discussions-${{ github.ref_name }}"
+          mkdir -p "$FOLDER"
+          echo '[]' > "$FOLDER/discussions-all.json"
+          NEXT="first"
 
-          while [ "$NEXT" != "null" ]; do
+          while [ ! -z "$NEXT" ]; do
             echo "Fetching discussions after cursor: $NEXT"
-            if [ "$NEXT" = "null" ]; then
-              gh api graphql -F query='{
-                repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                  discussions(first: 100) {
-                    pageInfo { endCursor hasNextPage }
-                    nodes {
-                      title
-                      body
-                      url
-                      number
-                      createdAt
-                      category { name }
+            if [ "$NEXT" == "first" ]; then
+              echo "Fetching first"
+              RESPONSE=$(gh api graphql --field query='
+                query {
+                  repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
+                    discussions(first: 10) {
+                      pageInfo { endCursor hasNextPage }
+                      nodes {
+                        title
+                        url
+                        number
+                        createdAt
+                        category { name }
+                      }
                     }
                   }
                 }
-              }' > temp/page.json
+              ')
             else
-              gh api graphql -F query='query($cursor: String!) {
-                repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                  discussions(first: 100, after: $cursor) {
-                    pageInfo { endCursor hasNextPage }
-                    nodes {
-                      title
-                      body
-                      url
-                      number
-                      createdAt
-                      category { name }
+              echo "Fetching continuous"
+              RESPONSE=$(gh api graphql --field query='
+                query ($cursor: String!) {
+                  repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
+                    discussions(first: 10, after: $cursor) {
+                      pageInfo { endCursor hasNextPage }
+                      nodes {
+                        title
+                        url
+                        number
+                        createdAt
+                        category { name }
+                      }
                     }
                   }
                 }
-              }' -f cursor="$NEXT" > temp/page.json
+              ' -f cursor="$NEXT")
             fi
 
-            node <<EOF
-            const fs = require('fs');
-            const all = JSON.parse(fs.readFileSync('temp/discussions-all.json'));
-            const page = JSON.parse(fs.readFileSync('temp/page.json')).data.repository.discussions.nodes;
-            fs.writeFileSync('temp/discussions-all.json', JSON.stringify(all.concat(page), null, 2));
-            EOF
+            echo "$RESPONSE" | jq '.data.repository.discussions.nodes' > $FOLDER/page.json
 
-            NEXT=$(node -e "console.log(require('./temp/page.json').data.repository.discussions.pageInfo.hasNextPage ? '\"' + require('./temp/page.json').data.repository.discussions.pageInfo.endCursor + '\"' : 'null')")
+            # Merge with existing
+            jq -s '.[0] + .[1]' $FOLDER/discussions-all.json $FOLDER/page.json > $FOLDER/merged.json
+            mv $FOLDER/merged.json $FOLDER/discussions-all.json
+            NEXT=$(echo "$RESPONSE" | jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "" end')
           done
 
-          mkdir -p comments
 
-          node <<EOF
-          const fs = require('fs');
-          const discussions = JSON.parse(fs.readFileSync('temp/discussions-all.json'));
-
-          const extractInfo = (body) => {
-            const startMatch = body.match(/Start: \(([^)]+)\) \(offset ([0-9]+)\)/);
-            const endMatch = body.match(/End: \(([^)]+)\) \(offset ([0-9]+)\)/);
-
-            if (!startMatch || !endMatch) return null;
-
-            return {
-              startXPath: startMatch[1],
-              startOffset: parseInt(startMatch[2]),
-              endXPath: endMatch[1],
-              endOffset: parseInt(endMatch[2])
-            };
-          };
-
-          const comments = discussions.map(d => {
-            if (d.category.name !== "Comment") return null;
-            const extracted = extractInfo(d.title);
-            if (!extracted) return null;
-
-            return {
-              page: new URL(d.url).searchParams.get('page') || '/',
-              startXPath: extracted.startXPath,
-              startOffset: extracted.startOffset,
-              endXPath: extracted.endXPath,
-              endOffset: extracted.endOffset,
-              url: d.url,
-              createdAt: d.createdAt,
-              number: d.number
-            };
-          }).filter(Boolean);
-
-          fs.writeFileSync('comments/comments.json', JSON.stringify(comments, null, 2));
-          EOF
-
-      - name: Commit and push updated comments.json
-        working-directory: site
+      - name: Show fetched discussions
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add r5-ELGA-e-medikation-section-specific-ballot-tool-approach/comments/comments.json
-          git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
-          git push
+          cat "discussions-${{ github.ref_name }}/discussions-all.json" || echo "No discussions found"
+
+
+      - name: Generate comments.json
+        shell: python
+        run: |
+          import os, json, base64
+          def decompress_xpath(compressed):
+              parts = compressed.split('/')
+              expanded = []
+
+              for part in parts:
+                  if '*' in part:
+                      tag, count = part.split('*')
+                      expanded.extend([tag] * int(count))
+                  elif part:
+                      expanded.append(part)
+
+              return '/' + '/'.join(expanded)
+
+          folder = f'discussions-{os.environ["GITHUB_REF_NAME"]}'
+          with open(f'{folder}/discussions-all.json', 'r') as f:
+            all_discussions = json.load(f)
+
+          comments = []
+          for d in all_discussions:
+            if d.get('category', {}).get('name') != 'Comment':
+                continue
+            try:
+                #decoded = base64.b64decode(d['title']).decode('utf-8')
+                #parts = decoded.split('|')
+                parts = d['title'].split('|')
+                if len(parts) != 4:
+                    continue
+                comments.append({
+                    'commentId': d['title'],
+                    'page': parts[0],
+                    'startXPath': decompress_xpath(parts[1]),
+                    'startOffset': int(parts[2]),
+                    'endOffset': int(parts[3]),
+                    'url': d['url'],
+                    'createdAt': d['createdAt'],
+                    'number': d['number']
+                    })
+            except Exception:
+              continue
+
+          with open(f'{folder}/comments.json', 'w') as f:
+            json.dump(comments, f, indent=2)
+
+      - name: Show final comments
+        run: |
+          cat "discussions-${{ github.ref_name }}/comments.json" || echo "No discussions found"
+
+      - name: Commit comments.json
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          if [ -f discussions-${{ github.ref_name }}/comments.json ]; then
+            git add discussions-${{ github.ref_name }}/comments.json
+            git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
+          else
+            echo "No comments.json generated. Skipping commit."
+          fi
+  
+      - name: Push updated comments.json
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.ROBO_OLIVER }}
+          repository: HL7Austria/ballot-comments
+          branch: main
+        
+        
