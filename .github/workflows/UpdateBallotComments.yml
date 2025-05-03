@@ -151,6 +151,7 @@ jobs:
         run: |
             git config user.name "github-actions[bot]"
             git config user.email "github-actions[bot]@users.noreply.github.com"
-            git remote set-url origin https://x-access-token:${GH_PAT}@github.com/HL7Austria/ballot-comments.git
+            git remote set-url origin https://HL7Austria:${GH_PAT}@github.com/HL7Austria/ballot-comments.git
             git push origin main
+        
         
