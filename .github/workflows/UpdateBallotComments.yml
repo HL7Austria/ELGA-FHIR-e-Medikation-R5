@@ -149,4 +149,4 @@ jobs:
         uses: ad-m/github-push-action@master
         with:
           github_token: ${{ secrets.ROBO_OLIVER }}
-          external_repository: HL7Austria/hl7austria.github.io
+          repository: HL7Austria/ballot-comments
