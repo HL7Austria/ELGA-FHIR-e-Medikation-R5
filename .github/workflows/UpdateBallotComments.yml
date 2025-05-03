@@ -14,6 +14,8 @@ permissions:
 jobs:
   update-comments:
     runs-on: ubuntu-latest
+    env:
+      REPO_NAME: ${{ github.event.repository.name }}
     steps:
       - name: Checkout Ballot Comment Repo
         uses: actions/checkout@v4
@@ -26,7 +28,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          FOLDER="discussions-${{ github.event.repository.name }}"
+          FOLDER="discussions-${REPO_NAME}"
           mkdir -p "$FOLDER"
           echo '[]' > "$FOLDER/discussions-all.json"
           NEXT="first"
@@ -82,7 +84,7 @@ jobs:
 
       - name: Show fetched discussions
         run: |
-          cat "discussions-${{ github.event.repository.name }}/discussions-all.json" || echo "No discussions found"
+          cat "discussions-${REPO_NAME}/discussions-all.json" || echo "No discussions found"
 
 
       - name: Generate comments.json
@@ -134,14 +136,14 @@ jobs:
 
       - name: Show final comments
         run: |
-          cat "discussions-${{ github.event.repository.name }}/comments.json" || echo "No discussions found"
+          cat "discussions-${REPO_NAME}/comments.json" || echo "No discussions found"
 
       - name: Commit comments.json
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          if [ -f discussions-${{ github.event.repository.name }}/comments.json ]; then
-            git add discussions-${{ github.event.repository.name }}/comments.json
+          if [ -f discussions-${REPO_NAME}/comments.json ]; then
+            git add discussions-${REPO_NAME}/comments.json
             git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
           else
             echo "No comments.json generated. Skipping commit."
