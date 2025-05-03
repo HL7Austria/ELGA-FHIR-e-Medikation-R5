@@ -102,7 +102,7 @@ jobs:
 
               return '/' + '/'.join(expanded)
 
-          folder = f'discussions-{os.environ["GITHUB_REF_NAME"]}'
+          folder = f'discussions-{os.environ["REPO_NAME"]}'
           with open(f'{folder}/discussions-all.json', 'r') as f:
             all_discussions = json.load(f)
 
