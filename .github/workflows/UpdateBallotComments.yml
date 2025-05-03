@@ -135,14 +135,18 @@ jobs:
         run: |
           cat "discussions-${{ github.ref_name }}/comments.json" || echo "No discussions found"
 
-      - name: Commit and push updated comments.json
+      - name: Commit comments.json
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           if [ -f discussions-${{ github.ref_name }}/comments.json ]; then
             git add  discussions-${{ github.ref_name }}/comments.json
             git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
-            git push
           else
             echo "No comments.json generated. Skipping commit."
           fi
+      - name: Push updated comments.json
+        uses: actions-js/push@master
+        with:
+          personal_token: ${{ secrets.ROBO_OLIVER }}
+          external_repository: HL7Austria/hl7austria.github.io
