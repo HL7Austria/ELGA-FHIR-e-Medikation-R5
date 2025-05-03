@@ -26,7 +26,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          FOLDER="discussions-${{ github.ref_name }}"
+          FOLDER="discussions-${{ github.event.repository.name }}"
           mkdir -p "$FOLDER"
           echo '[]' > "$FOLDER/discussions-all.json"
           NEXT="first"
@@ -82,7 +82,7 @@ jobs:
 
       - name: Show fetched discussions
         run: |
-          cat "discussions-${{ github.ref_name }}/discussions-all.json" || echo "No discussions found"
+          cat "discussions-${{ github.event.repository.name }}/discussions-all.json" || echo "No discussions found"
 
 
       - name: Generate comments.json
@@ -134,14 +134,14 @@ jobs:
 
       - name: Show final comments
         run: |
-          cat "discussions-${{ github.ref_name }}/comments.json" || echo "No discussions found"
+          cat "discussions-${{ github.event.repository.name }}/comments.json" || echo "No discussions found"
 
       - name: Commit comments.json
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          if [ -f discussions-${{ github.ref_name }}/comments.json ]; then
-            git add discussions-${{ github.ref_name }}/comments.json
+          if [ -f discussions-${{ github.event.repository.name }}/comments.json ]; then
+            git add discussions-${{ github.event.repository.name }}/comments.json
             git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
           else
             echo "No comments.json generated. Skipping commit."
