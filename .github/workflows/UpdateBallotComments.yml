@@ -20,6 +20,7 @@ jobs:
         with:
           repository: HL7Austria/ballot-comments
           path: .
+          token: ${{ secrets.ROBO_OLIVER }}
 
       - name: Fetch Discussions
         env:
@@ -137,21 +138,20 @@ jobs:
 
       - name: Commit comments.json
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
           if [ -f discussions-${{ github.ref_name }}/comments.json ]; then
-            git add  discussions-${{ github.ref_name }}/comments.json
+            git add discussions-${{ github.ref_name }}/comments.json
             git commit -m "Update comments.json from discussions event" || echo "No changes to commit"
           else
             echo "No comments.json generated. Skipping commit."
           fi
+  
       - name: Push updated comments.json
-        env:
-          GH_PAT: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-            git config user.name "github-actions[bot]"
-            git config user.email "github-actions[bot]@users.noreply.github.com"
-            git remote set-url origin https://HL7Austria:${GH_PAT}@github.com/HL7Austria/ballot-comments.git
-            git push origin main
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.ROBO_OLIVER }}
+          repository: HL7Austria/ballot-comments
+          branch: main
         
         
