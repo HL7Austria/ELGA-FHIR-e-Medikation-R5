@@ -146,7 +146,7 @@ jobs:
             echo "No comments.json generated. Skipping commit."
           fi
       - name: Push updated comments.json
-        uses: actions-js/push@master
+        uses: ad-m/github-push-action@master
         with:
-          personal_token: ${{ secrets.ROBO_OLIVER }}
+          github_token: ${{ secrets.ROBO_OLIVER }}
           external_repository: HL7Austria/hl7austria.github.io
