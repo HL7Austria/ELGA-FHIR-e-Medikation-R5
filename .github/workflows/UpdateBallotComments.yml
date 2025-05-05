@@ -40,7 +40,7 @@ jobs:
               RESPONSE=$(gh api graphql --field query='
                 query {
                   repository(owner: "HL7Austria", name: "'"${REPO_NAME}"'") {
-                    discussions(first: 10) {
+                    discussions(first: 100) {
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
@@ -58,7 +58,7 @@ jobs:
               RESPONSE=$(gh api graphql --field query='
                 query ($cursor: String!) {
                   repository(owner: "HL7Austria", name: "'"${REPO_NAME}"'") {
-                    discussions(first: 10, after: $cursor) {
+                    discussions(first: 100, after: $cursor) {
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
