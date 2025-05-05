@@ -81,12 +81,6 @@ jobs:
             NEXT=$(echo "$RESPONSE" | jq -r '.data.repository.discussions.pageInfo | if .hasNextPage then .endCursor else "" end')
           done
 
-
-      - name: Show fetched discussions
-        run: |
-          cat "discussions-${REPO_NAME}/discussions-all.json" || echo "No discussions found"
-
-
       - name: Generate comments.json
         shell: python
         run: |
@@ -133,10 +127,6 @@ jobs:
 
           with open(f'{folder}/comments.json', 'w') as f:
             json.dump(comments, f, indent=2)
-
-      - name: Show final comments
-        run: |
-          cat "discussions-${REPO_NAME}/comments.json" || echo "No discussions found"
 
       - name: Commit comments.json
         run: |
