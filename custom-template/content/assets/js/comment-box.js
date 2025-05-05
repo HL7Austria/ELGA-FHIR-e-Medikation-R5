@@ -195,7 +195,7 @@
         giscusScript.crossOrigin = 'anonymous';
         giscusScript.async = true;
       
-        // Just before appending
+        //For debugging
         console.log('💬 Injecting Giscus with term:', commentId);
       
         container.appendChild(closeButton);
@@ -223,6 +223,26 @@
           }
         };
       }
+    }
+
+    function snapToWordBoundaries(text, maxWords = 30) {
+      const words = text.trim().split(/\s+/);
+      if (!words || words.length === 0) return '';
+    
+      let cleanedText = '';
+    
+      if (words.length === 1) {
+        cleanedText = words[0];
+      } else {
+        // Skip the first word to avoid mid-word selections
+        // Also skip the last word to avoid trailing mid-word errors
+        cleanedText = words.slice(1, Math.min(words.length - 1, maxWords - 1)).join(' ');
+      }
+    
+      return encodeURIComponent(cleanedText)
+        .replace(/\(/g, '%28')
+        .replace(/\)/g, '%29')
+        .replace(/-/g, '%2D');
     }
   
     function createTemplateBox(comment) {
@@ -275,12 +295,18 @@
           option.textContent = value;
           ratingSelect.appendChild(option);
         });
+
+        const selection = window.getSelection();
+        const text = selection.toString().trim();
+        const fragment = snapToWordBoundaries(text);
+        const linkToHighlight = `${location.href.split('#')[0]}#:~:text=${fragment}`;
       
         const copyBtn = document.createElement('button');
         copyBtn.textContent = '📋 Copy and Comment';
         copyBtn.style.marginTop = '0.5rem';
         copyBtn.onclick = () => {
           const finalTemplate = `### Passage in question\n> ${comment.selection}\n\n` +
+                                `### 🔗 [Highlight Link](${linkToHighlight})\n\n` +
                                 `### Describe your issue\n${issueInput.value}\n\n` +
                                 `### Describe your proposed solution\n${solutionInput.value}\n\n` +
                                 `### Rating\n${ratingSelect.value}`;
