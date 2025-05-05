@@ -39,8 +39,8 @@ jobs:
               echo "Fetching first"
               RESPONSE=$(gh api graphql --field query='
                 query {
-                  repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                    discussions(first: 10) {
+                  repository(owner: "HL7Austria", name: "'"${REPO_NAME}"'") {
+                    discussions(first: 100) {
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
@@ -57,8 +57,8 @@ jobs:
               echo "Fetching continuous"
               RESPONSE=$(gh api graphql --field query='
                 query ($cursor: String!) {
-                  repository(owner: "HL7Austria", name: "ELGA-FHIR-e-Medikation-R5") {
-                    discussions(first: 10, after: $cursor) {
+                  repository(owner: "HL7Austria", name: "'"${REPO_NAME}"'") {
+                    discussions(first: 100, after: $cursor) {
                       pageInfo { endCursor hasNextPage }
                       nodes {
                         title
